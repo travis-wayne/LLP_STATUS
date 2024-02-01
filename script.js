@@ -249,8 +249,14 @@ const dashboardTable = document.getElementById("dashboard_table")
 			<td>${dt.date || "-"}</td>
 		</tr>`
 
+		let html = `<tr>
+		<td>${dt.description}</td>
+		<td>${dt.hrsleft || "-"}</td>
+
+	</tr>`
+
 		partsTable.insertAdjacentHTML("beforeend", markup)
-		dashboardTable.insertAdjacentHTML("beforeend", markup)
+		dashboardTable.insertAdjacentHTML("beforeend", html)
 		})
 	} catch (err) {
 		console.log(err);

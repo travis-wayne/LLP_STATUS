@@ -508,6 +508,8 @@ body {
 
 #content main .table-data .order table td {
 	padding: 16px 0;
+	text-transform: uppercase;
+
 }
 
 #content main .table-data .order table tr td:first-child {
@@ -583,6 +585,15 @@ body {
 
 #content main .table-data .todo .todo-list li:last-child {
 	margin-bottom: 0;
+}
+
+
+.container {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	width: 100%;
+	gap: 20px;
 }
 
 /* MAIN */
@@ -699,9 +710,15 @@ body {
 #analytics{
 	background-color: #fff;
 	padding: 20px;
-	border-radius: 8px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-	margin-bottom: 20px;
-	margin-top: 50px;
+	border-radius: 20px;
+	/* box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); */
+	/* margin-bottom: 20px;
+	margin-top: 50px; */
 }
 
+canvas {
+	/* height: 125px; */
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+}
