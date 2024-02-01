@@ -48,11 +48,11 @@ const searchButtonIcon = document.querySelector('#content nav form .form-input b
 
 
 
-if(window.innerWidth < 768) {
-	sidebar.classList.add('hide');
-} else if(window.innerWidth > 576) {
-	sidebar.classList.add('hide');
-}
+// if(window.innerWidth < 768) {
+// 	sidebar.classList.add('hide');
+// } else if(window.innerWidth > 576) {
+// 	sidebar.classList.add('hide');
+// }
 
 
 
@@ -112,39 +112,6 @@ function updateDisplay() {
 	ele.classList.add('active');
 }
 
-// const planeHeading = document.querySelector(".plane_heading")
-// const selectPlanes = document.getElementById("select_plane")
-
-
-// planeHeading.innerText = "5n-cag"
-
-// async function getPlane(parentEle) {
-// 	try {
-// 		const res = await fetch(`https://llp-api.onrender.com/api/v1/planes`);
-// 		const data = await res.json();
-
-// 		data.forEach(dt => {
-// 			const html = `<option class="planes">${dt.name}</option>`;
-// 			parentEle.insertAdjacentHTML("afterbegin", html)
-// 		})
-
-// 		// const selectPlanes = document.getElementById("select_plane")
-// 		const planes = document.querySelectorAll(".planes")
-// 		planes.forEach(plane => {
-// 			return plane.addEventListener("click", () => {
-// 				planeHeading.innerText = plane.innerText
-// 				// console.log(plane.innerText);
-// 				console.log(planeHeading);
-// 			})
-// 		})
-// console.log(planes);
-	
-// 	} catch (err) {
-// 		console.log(err);
-// 	}
-// }
-// getPlane(selectPlanes)
-
 const dropdown = document.getElementById("custom_dropdown");
 const selectedOption = document.getElementById("selected_option");
 const dropdownContent = document.getElementById("custom_dropdown_content");
@@ -166,8 +133,10 @@ async function populatePlanesDropdown() {
       option.addEventListener("click", () => {
 		localStorage.setItem("aircraft", dt.name)
 		tableData(dt.name)
-        selectedOption.textContent = dt.name;
-        planeHeading.innerText = dt.name;
+        selectedOption.innerHTML =
+          dt.name + `<i class='bx bxs-chevron-down'></i>`;
+        planeHeading.innerText =
+          dt.name ;
 		tatElement.innerText = dt.tat
 		tetElement.innerText = dt.tet
 		landingsElement.innerText = dt.landings
@@ -197,7 +166,7 @@ let analyticsData = {
 	labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 	datasets: [
 	  {
-		label: "Page Views",
+		label: "Life Limited Parts",
 		backgroundColor: "rgba(75, 192, 192, 0.2)",
 		borderColor: "rgba(75, 192, 192, 1)",
 		borderWidth: 1,
