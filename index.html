@@ -37,13 +37,13 @@
 			</li>
 			<li id="parts_link">
 				<a href="#parts">
-					<i class="bx bxs-shopping-bag-alt"></i>
+					<i class='bx bxs-analyse'></i>
 					<span class="text">Part</span>
 				</a>
 			</li>
 			<li id="status_link">
 				<a href="#form">
-					<i class="bx bxs-doughnut-chart"></i>
+					<i class='bx bx-book-open'></i>
 					<span class="text">Logs</span>
 				</a>
 			</li>
@@ -83,11 +83,13 @@
 		<nav>
 			<i class="bx bx-menu"></i>
 			<div class="custom-dropdown" id="custom_dropdown">
-				<span class="custom-dropdown-option" id="selected_option">Select an Aircraft</span>
+				<span class="custom-dropdown-option" id="selected_option">Select an Aircraft <i class='bx bxs-chevron-down'></i></i></span>
 				<div class="custom-dropdown-content" id="custom_dropdown_content"></div>
 			</div>
-			<input type="checkbox" id="switch-mode" hidden />
+			<div class="mode">
+				<input type="checkbox" id="switch-mode" hidden />
 			<label for="switch-mode" class="switch-mode"></label>
+			</div>
 		</nav>
 		<!-- NAVBAR -->
 
@@ -111,21 +113,21 @@
 
 				<ul class="box-info">
 					<li>
-						<i class="bx bxs-calendar-check"></i>
+						<i class='bx bx-stopwatch'></i>
 						<span class="text">
 							<h3 id="tat_value">0</h3>
 							<p>Total Landing Time</p>
 						</span>
 					</li>
 					<li>
-						<i class="bx bxs-group"></i>
+						<i class='bx bx-cog'></i>
 						<span class="text">
 							<h3 id="tet_value">0</h3>
 							<p>Total Engine Time</p>
 						</span>
 					</li>
 					<li>
-						<i class="bx bxs-dollar-circle"></i>
+						<i class='bx bxs-plane-land'></i>
 						<span class="text">
 							<h3 id="landings_value">0</h3>
 							<p>Landings</p>
@@ -153,8 +155,8 @@
 						<div class="order">
 							<div class="head">
 								<h3>Status of Limited Parts</h3>
-								<i class="bx bx-search"></i>
-								<i class="bx bx-filter"></i>
+								<!-- <i class="bx bx-search"></i>
+								<i class="bx bx-filter"></i> -->
 							</div>
 							<table>
 								<thead>
@@ -234,7 +236,7 @@
 			<section class="content_display hidden" id="form">
 				<div class="head-title">
 					<div class="left">
-						<h1>Form</h1>
+						<h1>Technical Log</h1>
 						<ul class="breadcrumb">
 							<li>
 								<a href="#">Dashboard</a>
@@ -250,7 +252,7 @@
 				<section class="features" id="features">
 					<div class="container">
 						<div class="row">
-							<h5 class="mb-2 display-2" style="font-size: 40px;"> Technical Log</h5>
+							<h5 class="mb-2 display-2" style="font-size: 40px;"></h5>
 							<form>
 								<div class="row jumbotron box8" style="
 								background: transparent;">
