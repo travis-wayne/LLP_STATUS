@@ -1,4 +1,4 @@
-const allSideMenu = document.querySelectorAll('#sidebar .side-menu.top li a');
+const allSideMenu = document.querySelectorAll("#sidebar .side-menu.top li a");
 
 // allSideMenu.forEach(item=> {
 // 	const li = item.parentElement;
@@ -11,25 +11,20 @@ const allSideMenu = document.querySelectorAll('#sidebar .side-menu.top li a');
 // 	})
 // });
 
-
-
-
 // TOGGLE SIDEBAR
-const menuBar = document.querySelector('#content nav .bx.bx-menu');
-const sidebar = document.getElementById('sidebar');
+const menuBar = document.querySelector("#content nav .bx.bx-menu");
+const sidebar = document.getElementById("sidebar");
 
-menuBar.addEventListener('click', function () {
-	sidebar.classList.toggle('hide');
-})
+menuBar.addEventListener("click", function () {
+  sidebar.classList.toggle("hide");
+});
 
-
-
-
-
-
-
-const searchButton = document.querySelector('#content nav form .form-input button');
-const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
+const searchButton = document.querySelector(
+  "#content nav form .form-input button"
+);
+const searchButtonIcon = document.querySelector(
+  "#content nav form .form-input button .bx"
+);
 // const searchForm = document.querySelector('#content nav form');
 
 // searchButton.addEventListener('click', function (e) {
@@ -44,72 +39,63 @@ const searchButtonIcon = document.querySelector('#content nav form .form-input b
 // 	}
 // })
 
-
-
-
-
 // if(window.innerWidth < 768) {
 // 	sidebar.classList.add('hide');
 // } else if(window.innerWidth > 576) {
 // 	sidebar.classList.add('hide');
 // }
 
+const switchMode = document.getElementById("switch-mode");
 
-
-
-
-
-const switchMode = document.getElementById('switch-mode');
-
-switchMode.addEventListener('change', function () {
-	if(this.checked) {
-		document.body.classList.add('dark');
-	} else {
-		document.body.classList.remove('dark');
-	}
-})
+switchMode.addEventListener("change", function () {
+  if (this.checked) {
+    document.body.classList.add("dark");
+  } else {
+    document.body.classList.remove("dark");
+  }
+});
 
 const contents = document.querySelectorAll(".content_display");
-const dashboard = document.getElementById("dashboard")
-const parts = document.getElementById("parts")
-const form = document.getElementById("form")
-const dashboardLink = document.getElementById("dashboard_link")
-const partsLink = document.getElementById("parts_link")
-const formLink = document.getElementById("form_link")
+const dashboard = document.getElementById("dashboard");
+const parts = document.getElementById("parts");
+const form = document.getElementById("form");
+const dashboardLink = document.getElementById("dashboard_link");
+const partsLink = document.getElementById("parts_link");
+const formLink = document.getElementById("form_link");
 
 function displayContents(ele) {
-	contents.forEach(con => con.classList.add("hidden"))
-	ele.classList.remove("hidden")
+  contents.forEach((con) => con.classList.add("hidden"));
+  ele.classList.remove("hidden");
 }
 
 function updateDisplay() {
-	const state = window.location.hash.slice(1);
-	switch (state) {
-	  case "dashboard":
-		displayContents(dashboard);
-		active(dashboardLink);
-		break;
-	  case "parts":
-		displayContents(parts);
-		active(partsLink);
-		break;
-	  case "form":
-		displayContents(form);
-		active(formLink);
-		break;
+  const state = window.location.hash.slice(1);
+  switch (state) {
+    case "dashboard":
+      displayContents(dashboard);
+      active(dashboardLink);
+      break;
+    case "parts":
+      displayContents(parts);
+      active(partsLink);
+      break;
+    case "log":
+      displayContents(form);
+      active(formLink);
+      break;
 
-	  default:
-		break;
-	}
+    default:
+      break;
   }
-  window.addEventListener("hashchange", updateDisplay);
-  window.addEventListener("load", updateDisplay);
+}
+window.addEventListener("hashchange", updateDisplay);
+window.addEventListener("load", updateDisplay);
 
-  function active(ele) {
-	allSideMenu.forEach(i=> {
-		i.parentElement.classList.remove('active');
-	})
-	ele.classList.add('active');
+function active(ele) {
+  allSideMenu.forEach((i) => {
+    i.parentElement.classList.remove("active");
+  });
+  ele.classList.add("active");
 }
 
 const dropdown = document.getElementById("custom_dropdown");
@@ -119,27 +105,29 @@ const planeHeading = document.querySelector(".plane_heading");
 const tatElement = document.querySelector("#tat_value");
 const tetElement = document.querySelector("#tet_value");
 const landingsElement = document.querySelector("#landings_value");
+let tetsohElement = document.querySelector("#tetsoh_value");
 
 async function populatePlanesDropdown() {
   try {
     const res = await fetch(`https://llp-api.onrender.com/api/v1/planes`);
     const data = await res.json();
 
-    data.forEach(dt => {
+    data.forEach((dt) => {
       const option = document.createElement("div");
       option.classList.add("custom-dropdown-option");
       option.textContent = dt.name;
 
       option.addEventListener("click", () => {
-		localStorage.setItem("aircraft", dt.name)
-		tableData(dt.name)
+        // displayAnalyticsChart();
+        localStorage.setItem("aircraft", dt.name);
+        tableData(dt.name);
         selectedOption.innerHTML =
           dt.name + `<i class='bx bxs-chevron-down'></i>`;
-        planeHeading.innerText =
-          dt.name ;
-		tatElement.innerText = dt.tat
-		tetElement.innerText = dt.tet
-		landingsElement.innerText = dt.landings
+        planeHeading.innerText = dt.name;
+        tatElement.innerText = dt.tat;
+        tetElement.innerText = dt.tet;
+        landingsElement.innerText = dt.landings;
+        tetsohElement.innerText = tetElement.innerText;
         dropdownContent.style.display = "none";
       });
 
@@ -153,7 +141,6 @@ async function populatePlanesDropdown() {
     dropdown.addEventListener("mouseout", () => {
       dropdownContent.style.display = "none";
     });
-
   } catch (err) {
     console.error("Error fetching data:", err);
   }
@@ -162,53 +149,77 @@ async function populatePlanesDropdown() {
 populatePlanesDropdown();
 
 //Bar-chart
-let analyticsData = {
-	labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-	datasets: [
-	  {
-		label: "Life Limited Parts",
-		backgroundColor: "rgba(75, 192, 192, 0.2)",
-		borderColor: "rgba(75, 192, 192, 1)",
-		borderWidth: 1,
-		data: [65, 59, 80, 81, 56, 55, 40, 57, 32, 45, 83, 23],
-	  },
-	],
-  };
-  // Function to display analytics chart
-  function displayAnalyticsChart() {
-	const chartCanvas = document
-	  .getElementById("analytics-chart")
-	  .getContext("2d");
-	new Chart(chartCanvas, {
-	  type: "bar",
-	  data: analyticsData,
-	  options: {
-		scales: {
-		  y: {
-			beginAtZero: true,
-		  },
-		},
-	  },
-	});
+function generateRandomData(length) {
+  var randomData = [];
+  for (var i = 0; i < length; i++) {
+    randomData.push(Math.floor(Math.random() * 10));
   }
-  document.addEventListener("DOMContentLoaded", function () {
-	displayAnalyticsChart();
+  return randomData;
+}
+
+var analyticsData = {
+  labels: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
+  datasets: [
+    {
+      label: "Life Limited Parts",
+      backgroundColor: "rgba(75, 192, 192, 0.2)",
+      borderColor: "rgba(75, 192, 192, 1)",
+      borderWidth: 1,
+      data: generateRandomData(12), // Assuming 12 months
+    },
+  ],
+};
+
+// Function to display analytics chart
+function displayAnalyticsChart() {
+  const chartCanvas = document
+    .getElementById("analytics-chart")
+    .getContext("2d");
+  new Chart(chartCanvas, {
+    type: "bar",
+    data: analyticsData,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
   });
+}
+document.addEventListener("DOMContentLoaded", function () {
+  displayAnalyticsChart();
+});
 
-  // table data
-const partsTable = document.getElementById("parts_table")
-const dashboardTable = document.getElementById("dashboard_table")
+// table data
+const partsTable = document.getElementById("parts_table");
+const dashboardTable = document.getElementById("dashboard_table");
 
-  async function tableData(aircraft) {
-	try {
-		partsTable.innerHTML = ``
-		dashboardTable.innerHTML = ``
+async function tableData(aircraft) {
+  try {
+    partsTable.innerHTML = ``;
+    dashboardTable.innerHTML = ``;
 
-		const res = await fetch(`https://llp-api.onrender.com/api/v1/parts/${aircraft}`)
-		const data = await res.json()
-		
-		data.map(dt => {
-			let markup = `<tr>
+    const res = await fetch(
+      `https://llp-api.onrender.com/api/v1/parts/${aircraft}`
+    );
+    const data = await res.json();
+
+    data.map((dt) => {
+      let markup = `<tr>
 			<td>${dt.id}</td>
 			<td>${dt.description}</td>
 			<td>${dt.number || "-"}</td>
@@ -216,18 +227,18 @@ const dashboardTable = document.getElementById("dashboard_table")
 			<td>${dt.ac || "-"}</td>
 			<td>${dt.hrsleft || "-"}</td>
 			<td>${dt.date || "-"}</td>
-		</tr>`
+		</tr>`;
 
-		let html = `<tr>
+      let html = `<tr>
 		<td>${dt.description}</td>
 		<td>${dt.hrsleft || "-"}</td>
 
-	</tr>`
+	</tr>`;
 
-		partsTable.insertAdjacentHTML("beforeend", markup)
-		dashboardTable.insertAdjacentHTML("beforeend", html)
-		})
-	} catch (err) {
-		console.log(err);
-	}
+      partsTable.insertAdjacentHTML("beforeend", markup);
+      dashboardTable.insertAdjacentHTML("beforeend", html);
+    });
+  } catch (err) {
+    console.log(err);
   }
+}
