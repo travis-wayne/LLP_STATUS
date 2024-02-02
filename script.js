@@ -1,60 +1,5 @@
 const allSideMenu = document.querySelectorAll("#sidebar .side-menu.top li a");
 
-// allSideMenu.forEach(item=> {
-// 	const li = item.parentElement;
-
-// 	item.addEventListener('click', function () {
-// 		allSideMenu.forEach(i=> {
-// 			i.parentElement.classList.remove('active');
-// 		})
-// 		li.classList.add('active');
-// 	})
-// });
-
-// TOGGLE SIDEBAR
-const menuBar = document.querySelector("#content nav .bx.bx-menu");
-const sidebar = document.getElementById("sidebar");
-
-menuBar.addEventListener("click", function () {
-  sidebar.classList.toggle("hide");
-});
-
-const searchButton = document.querySelector(
-  "#content nav form .form-input button"
-);
-const searchButtonIcon = document.querySelector(
-  "#content nav form .form-input button .bx"
-);
-// const searchForm = document.querySelector('#content nav form');
-
-// searchButton.addEventListener('click', function (e) {
-// 	if(window.innerWidth < 576) {
-// 		e.preventDefault();
-// 		searchForm.classList.toggle('show');
-// 		if(searchForm.classList.contains('show')) {
-// 			searchButtonIcon.classList.replace('bx-search', 'bx-x');
-// 		} else {
-// 			searchButtonIcon.classList.replace('bx-x', 'bx-search');
-// 		}
-// 	}
-// })
-
-// if(window.innerWidth < 768) {
-// 	sidebar.classList.add('hide');
-// } else if(window.innerWidth > 576) {
-// 	sidebar.classList.add('hide');
-// }
-
-const switchMode = document.getElementById("switch-mode");
-
-switchMode.addEventListener("change", function () {
-  if (this.checked) {
-    document.body.classList.add("dark");
-  } else {
-    document.body.classList.remove("dark");
-  }
-});
-
 const contents = document.querySelectorAll(".content_display");
 const dashboard = document.getElementById("dashboard");
 const parts = document.getElementById("parts");
@@ -98,6 +43,24 @@ function active(ele) {
   ele.classList.add("active");
 }
 
+// TOGGLE SIDEBAR
+const menuBar = document.querySelector("#content nav .bx.bx-menu");
+const sidebar = document.getElementById("sidebar");
+
+menuBar.addEventListener("click", function () {
+  sidebar.classList.toggle("hide");
+});
+
+const switchMode = document.getElementById("switch-mode");
+
+switchMode.addEventListener("change", function () {
+  if (this.checked) {
+    document.body.classList.add("dark");
+  } else {
+    document.body.classList.remove("dark");
+  }
+});
+
 const dropdown = document.getElementById("custom_dropdown");
 const selectedOption = document.getElementById("selected_option");
 const dropdownContent = document.getElementById("custom_dropdown_content");
@@ -118,7 +81,6 @@ async function populatePlanesDropdown() {
       option.textContent = dt.name;
 
       option.addEventListener("click", () => {
-        // displayAnalyticsChart();
         localStorage.setItem("aircraft", dt.name);
         tableData(dt.name);
         selectedOption.innerHTML =
@@ -133,20 +95,30 @@ async function populatePlanesDropdown() {
 
       dropdownContent.appendChild(option);
     });
-
-    dropdown.addEventListener("mouseover", () => {
-      dropdownContent.style.display = "block";
-    });
-
-    dropdown.addEventListener("mouseout", () => {
-      dropdownContent.style.display = "none";
-    });
   } catch (err) {
     console.error("Error fetching data:", err);
   }
 }
 
 populatePlanesDropdown();
+
+dropdown.addEventListener("click", () => {
+  if (dropdownContent.style.display == "block") {
+    dropdownContent.style.display = "none";
+  } else {
+    dropdownContent.style.display = "block";
+  }
+});
+
+// document.addEventListener("DOMContentLoaded", function (event) {
+//   if (event.target !== dropdownContent && event.target !== dropdown) {
+//     dropdownContent.style.display = "none";
+//   }
+// });
+
+// dropdownContent.addEventListener("click", function () {
+//     dropdownContent.style.display = "none";
+// });
 
 //Bar-chart
 function generateRandomData(length) {
@@ -207,6 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // table data
 const partsTable = document.getElementById("parts_table");
 const dashboardTable = document.getElementById("dashboard_table");
+let tableTotal = document.querySelectorAll(".head h3 span");
 
 async function tableData(aircraft) {
   try {
@@ -218,9 +191,11 @@ async function tableData(aircraft) {
     );
     const data = await res.json();
 
+    tableTotal.forEach((total) => (total.innerHTML = `(${data.length})`));
+    let serial = 1;
     data.map((dt) => {
       let markup = `<tr>
-			<td>${dt.id}</td>
+			<td>${serial++}</td>
 			<td>${dt.description}</td>
 			<td>${dt.number || "-"}</td>
 			<td>${dt.quantity || "-"}</td>
@@ -238,6 +213,83 @@ async function tableData(aircraft) {
       partsTable.insertAdjacentHTML("beforeend", markup);
       dashboardTable.insertAdjacentHTML("beforeend", html);
     });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// Overlay and Modal
+const overlay = document.querySelector(".overlay");
+const modal = document.querySelector(".modal_new");
+const addPart = document.getElementById("addPart");
+
+addPart.addEventListener("click", (e) => {
+  e.preventDefault();
+  openModal();
+});
+
+function openModal() {
+  overlay.classList.remove("hidden");
+  modal.classList.remove("hidden");
+}
+
+function closeModal() {
+  overlay.classList.add("hidden");
+  modal.classList.add("hidden");
+}
+
+//Add part
+const addPartForm = document.getElementById("addPartForm");
+const descriptionInput = document.getElementById("description");
+const partNum = document.getElementById("partNum");
+const quantity = document.getElementById("quantity");
+const acHrs = document.getElementById("acHrs");
+const hrsLeft = document.getElementById("hrsLeft");
+const date = document.getElementById("date");
+const addPartFormMsg = document.getElementById("addPartFormMsg");
+
+function reformatDate(date) {
+  if (!date) return null;
+  const originalDate = new Date(date);
+  const options = { year: "numeric", month: "short", day: "numeric" };
+  const formattedDate = new Intl.DateTimeFormat("en-UK", options).format(
+    originalDate
+  );
+  return formattedDate.trim().split(" ").join("-");
+}
+
+addPartForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const newData = {
+    aircraft: localStorage.getItem("aircraft"),
+    description: descriptionInput.value || null,
+    number: partNum.value || null,
+    quantity: quantity.value || null,
+    ac: acHrs.value || null,
+    hrsleft: hrsLeft.value || null,
+    date: reformatDate(date.value),
+  };
+
+  addToPart(newData);
+});
+
+async function addToPart(data) {
+  try {
+    const res = await fetch(`https://llp-api.onrender.com/api/v1/parts`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      addPartFormMsg.innerText = "Part Added";
+      addPartFormMsg.style.color = "green";
+
+      setTimeout(() => {
+        location.reload();
+      }, 500);
+    }
   } catch (err) {
     console.log(err);
   }
