@@ -667,9 +667,9 @@ body {
   border-radius: 5px;
 }
 
-.custom-dropdown:hover .custom-dropdown-content {
+/* .custom-dropdown:hover .custom-dropdown-content {
   display: block;
-}
+} */
 
 .custom-dropdown-option {
   padding: 10px 15px;
@@ -764,7 +764,7 @@ canvas {
 
 .button .button__text {
   transform: translateX(30px);
-  color: var(--light);
+  color: #fff;
   font-weight: 600;
 }
 
@@ -785,7 +785,7 @@ canvas {
 }
 
 .button:hover {
-  background: var(--light-blue);
+  background: var(--blue);
 }
 
 .button:hover .button__text {
@@ -798,10 +798,14 @@ canvas {
 }
 
 .button:active .button__icon {
-  background-color: var(--light-blue);
+  background-color: var(--blue);
 }
 
 .button:active {
-  border: 1px solid var(--light-blue);
+  border: 1px solid var(--blue);
 }
 
+#addPartFormMsg {
+	margin: 0px auto;
+	font-size: 20px;
+}

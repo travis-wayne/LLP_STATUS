@@ -169,7 +169,7 @@
             <div class="table-data">
               <div class="order">
                 <div class="head">
-                  <h3>Status of Limited Parts</h3>
+                  <h3>Status of Limited Parts<span>(0)</span></h3>
                 </div>
                 <table>
                   <thead>
@@ -444,6 +444,7 @@
       <i class="bx bxs-x-circle" id="closeModal" onclick="closeModal()"></i>
       <div class="container">
         <div class="row">
+			<p id="addPartFormMsg"></p>
           <form id="addPartForm">
             <div class="row jumbotron box8" style="background: transparent">
               <div class="col-sm-6 form-group">
@@ -454,7 +455,6 @@
                   name="description"
                   id="description"
                   placeholder=""
-                  required
                 />
               </div>
               <div class="col-sm-6 form-group">
@@ -465,7 +465,6 @@
                   name="partNum"
                   id="partNum"
                   placeholder=""
-                  required
                 />
               </div>
               <div class="col-sm-6 form-group">
@@ -476,7 +475,6 @@
                   name="quantity"
                   id="quantity"
                   placeholder=""
-                  required
                 />
               </div>
               <div class="col-sm-6 form-group">
@@ -487,7 +485,6 @@
                   name="acHrs"
                   id="acHrs"
                   placeholder=""
-                  required
                 />
               </div>
               <div class="col-sm-6 form-group">
@@ -498,7 +495,6 @@
                   name="hrsLeft"
                   id="hrsLeft"
                   placeholder=""
-                  required
                 />
               </div>
               <div class="col-sm-6 form-group">
@@ -509,12 +505,13 @@
                   name="date"
                   id="date"
                   placeholder=""
-                  required
                 />
               </div>
 
               <div class="col-sm-12 form-group mb-0">
-                <button class="btn btn-primary float-right" type="submit">Submit</button>
+                <button class="btn btn-primary float-right" type="submit">
+                  Submit
+                </button>
               </div>
             </div>
           </form>
