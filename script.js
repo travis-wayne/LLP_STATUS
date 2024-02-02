@@ -207,6 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // table data
 const partsTable = document.getElementById("parts_table");
 const dashboardTable = document.getElementById("dashboard_table");
+let tableTotal = document.querySelector(".head h3 span");
 
 async function tableData(aircraft) {
   try {
@@ -218,9 +219,11 @@ async function tableData(aircraft) {
     );
     const data = await res.json();
 
+    tableTotal.innerHTML = `(${data.length})`;
+    let serial = 1;
     data.map((dt) => {
       let markup = `<tr>
-			<td>${dt.id}</td>
+			<td>${serial++}</td>
 			<td>${dt.description}</td>
 			<td>${dt.number || "-"}</td>
 			<td>${dt.quantity || "-"}</td>
@@ -242,3 +245,55 @@ async function tableData(aircraft) {
     console.log(err);
   }
 }
+
+// Overlay and Modal
+const overlay = document.querySelector(".overlay");
+const modal = document.querySelector(".modal_new");
+const addPart = document.getElementById("addPart");
+
+addPart.addEventListener("click", (e) => {
+  e.preventDefault();
+  openModal();
+});
+
+function openModal() {
+  overlay.classList.remove("hidden");
+  modal.classList.remove("hidden");
+}
+
+function closeModal() {
+  overlay.classList.add("hidden");
+  modal.classList.add("hidden");
+}
+
+//Add part
+const addPartForm = document.getElementById("addPartForm")
+const descriptionInput = document.getElementById("description")
+const partNum = document.getElementById("partNum")
+const quantity = document.getElementById("quantity")
+const acHrs = document.getElementById("acHrs");
+const hrsLeft = document.getElementById("hrsLeft");
+const date = document.getElementById("date");
+
+function reformatDate(date) {
+  const originalDate = new Date(date);
+  const options = { year: "numeric", month: "short", day: "numeric" };
+  const formattedDate = new Intl.DateTimeFormat("en-UK", options).format(
+    originalDate
+  );
+  return formattedDate.trim().split(" ").join("-")
+}
+
+addPartForm.addEventListener("submit", (e) => {
+	e.preventDefault()
+	const newData = {
+    description: descriptionInput.value,
+    number: partNum.value,
+    quantity: quantity.value,
+    ac: acHrs.value,
+    hrsleft: hrsLeft.value,
+    date: reformatDate(date.value),
+  };
+
+	console.log(newData);
+})
