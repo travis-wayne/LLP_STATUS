@@ -504,14 +504,14 @@ button {
 }
 
 #content main .table-data .order table td {
-  /* display: flex;
-  align-items: center; */
   margin: 0px 10px;
   padding: 16px;
   text-transform: uppercase;
-  border-right: 2px solid var(--dark);
 }
 
+.table_cell {
+  border-right: 2px solid var(--dark);
+}
 
 #content main .table-data .order table td img {
   width: 36px;
