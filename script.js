@@ -61,6 +61,7 @@ switchMode.addEventListener("change", function () {
   }
 });
 
+// Aircraft dropdown menu
 const dropdown = document.getElementById("custom_dropdown");
 const selectedOption = document.getElementById("selected_option");
 const dropdownContent = document.getElementById("custom_dropdown_content");
@@ -90,7 +91,6 @@ async function populatePlanesDropdown() {
         tetElement.innerText = dt.tet;
         landingsElement.innerText = dt.landings;
         tetsohElement.innerText = tetElement.innerText;
-        dropdownContent.style.display = "none";
       });
 
       dropdownContent.appendChild(option);
@@ -103,22 +103,9 @@ async function populatePlanesDropdown() {
 populatePlanesDropdown();
 
 dropdown.addEventListener("click", () => {
-  if (dropdownContent.style.display == "block") {
-    dropdownContent.style.display = "none";
-  } else {
-    dropdownContent.style.display = "block";
-  }
+  dropdownContent.classList.toggle("hidden");
+  selectedOption.classList.remove("flash");
 });
-
-// document.addEventListener("DOMContentLoaded", function (event) {
-//   if (event.target !== dropdownContent && event.target !== dropdown) {
-//     dropdownContent.style.display = "none";
-//   }
-// });
-
-// dropdownContent.addEventListener("click", function () {
-//     dropdownContent.style.display = "none";
-// });
 
 //Bar-chart
 function generateRandomData(length) {
@@ -202,6 +189,9 @@ async function tableData(aircraft) {
 			<td>${dt.ac || "-"}</td>
 			<td>${dt.hrsleft || "-"}</td>
 			<td>${dt.date || "-"}</td>
+			<td><button class="status ${checkFlag(dt.date)}">${checkFlag(
+        dt.date
+      )}</button></td>
 		</tr>`;
 
       let html = `<tr>
@@ -218,6 +208,41 @@ async function tableData(aircraft) {
   }
 }
 
+// Check Flag function
+function parseCustomDateFormat(dateString) {
+  const months = {
+    jan: 0,
+    feb: 1,
+    mar: 2,
+    apr: 3,
+    may: 4,
+    jun: 5,
+    jul: 6,
+    aug: 7,
+    sep: 8,
+    oct: 9,
+    nov: 10,
+    dec: 11,
+  };
+
+  const [day, monthStr, year] = dateString.split("-");
+  const month = months[monthStr.toLowerCase()];
+  return new Date(parseInt(year, 10) + 2000, month, parseInt(day, 10));
+}
+
+function checkFlag(inputDate) {
+  if (!inputDate) return "pending";
+  const inputDateObject = parseCustomDateFormat(inputDate);
+
+  const currentDate = new Date();
+
+  if (inputDateObject < currentDate || inputDateObject == currentDate) {
+    return "unserviceable";
+  } else if (inputDateObject > currentDate) {
+    return "serviceable";
+  }
+}
+
 // Overlay and Modal
 const overlay = document.querySelector(".overlay");
 const modal = document.querySelector(".modal_new");
@@ -225,6 +250,7 @@ const addPart = document.getElementById("addPart");
 
 addPart.addEventListener("click", (e) => {
   e.preventDefault();
+  if (!planeHeading.innerText) return;
   openModal();
 });
 
@@ -258,6 +284,35 @@ function reformatDate(date) {
   return formattedDate.trim().split(" ").join("-");
 }
 
+function reformatDate(date) {
+  if (!date) return null;
+  const months = [
+    "jan",
+    "feb",
+    "mar",
+    "apr",
+    "may",
+    "jun",
+    "jul",
+    "aug",
+    "sep",
+    "oct",
+    "nov",
+    "dec",
+  ];
+
+  const [year, month, day] = date.split("-");
+  const monthAbbrev = months[parseInt(month, 10) - 1];
+  const yearLastTwoDigits = year.slice(-2);
+
+  const formattedDate = `${parseInt(
+    day,
+    10
+  )}-${monthAbbrev}-${yearLastTwoDigits}`;
+
+  return formattedDate;
+}
+
 addPartForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const newData = {
@@ -269,8 +324,9 @@ addPartForm.addEventListener("submit", (e) => {
     hrsleft: hrsLeft.value || null,
     date: reformatDate(date.value),
   };
+  console.log(newData)
 
-  addToPart(newData);
+//   addToPart(newData);
 });
 
 async function addToPart(data) {
