@@ -182,21 +182,25 @@ async function tableData(aircraft) {
     let serial = 1;
     data.map((dt) => {
       let markup = `<tr>
-			<td>${serial++}</td>
-			<td>${dt.description}</td>
-			<td>${dt.number || "-"}</td>
-			<td>${dt.quantity || "-"}</td>
-			<td>${dt.ac || "-"}</td>
-			<td>${dt.hrsleft || "-"}</td>
-			<td>${dt.date || "-"}</td>
-			<td><button class="status ${checkFlag(dt.date)}">${checkFlag(
-        dt.date
-      )}</button></td>
+			<td class="table_cell">${serial++}</td>
+			<td class="table_cell">${dt.description}</td>
+			<td class="table_cell">${dt.number || "-"}</td>
+			<td class="table_cell">${dt.quantity || "-"}</td>
+			<td class="table_cell">${dt.ac || "-"}</td>
+			<td class="table_cell">${dt.hrsleft || "-"}</td>
+			<td class="table_cell">${dt.date || "-"}</td>
+			<td class="table_cell"><button class="status ${checkFlag(
+        dt.date,
+        dt.hrsleft
+      )}">${checkFlag(dt.date, dt.hrsleft)}</button></td>
 		</tr>`;
 
       let html = `<tr>
 		<td>${dt.description}</td>
-		<td>${dt.hrsleft || "-"}</td>
+		<td><button class="status ${checkFlag(dt.date, dt.hrsleft)}">${checkFlag(
+        dt.date,
+        dt.hrsleft
+      )}</button></td>
 
 	</tr>`;
 
@@ -230,8 +234,11 @@ function parseCustomDateFormat(dateString) {
   return new Date(parseInt(year, 10) + 2000, month, parseInt(day, 10));
 }
 
-function checkFlag(inputDate) {
-  if (!inputDate) return "pending";
+function checkFlag(inputDate, hrs) {
+  if (!inputDate) {
+    if (hrs < 0) return "unserviceable";
+	return "serviceable";
+  }
   const inputDateObject = parseCustomDateFormat(inputDate);
 
   const currentDate = new Date();
@@ -324,9 +331,9 @@ addPartForm.addEventListener("submit", (e) => {
     hrsleft: hrsLeft.value || null,
     date: reformatDate(date.value),
   };
-  console.log(newData)
+  console.log(newData);
 
-//   addToPart(newData);
+  //   addToPart(newData);
 });
 
 async function addToPart(data) {
