@@ -108,57 +108,44 @@ dropdown.addEventListener("click", () => {
 });
 
 //Bar-chart
-function generateRandomData(length) {
-  var randomData = [];
-  for (var i = 0; i < length; i++) {
-    randomData.push(Math.floor(Math.random() * 10));
-  }
-  return randomData;
-}
+async function displayAnalyticsChart() {
+  try {
+    const res = await fetch(`https://llp-api.onrender.com/api/v1/planes/parts`);
+    const data = await res.json();
+    const aircraftArr = data.map((dt) => dt.name);
+	const aircraftLength = data.map(dt => dt.count)
 
-var analyticsData = {
-  labels: [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ],
-  datasets: [
-    {
-      label: "Life Limited Parts",
-      backgroundColor: "rgba(75, 192, 192, 0.2)",
-      borderColor: "rgba(75, 192, 192, 1)",
-      borderWidth: 1,
-      data: generateRandomData(12), // Assuming 12 months
-    },
-  ],
-};
-
-// Function to display analytics chart
-function displayAnalyticsChart() {
-  const chartCanvas = document
-    .getElementById("analytics-chart")
-    .getContext("2d");
-  new Chart(chartCanvas, {
-    type: "bar",
-    data: analyticsData,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
+    const analyticsData = {
+      labels: aircraftArr,
+      datasets: [
+        {
+          label: "Life Limited Parts",
+          backgroundColor: "rgba(60, 145, 230, 0.2)",
+          borderColor: "rgba(60, 145, 230, 1)",
+          borderWidth: 1,
+          data: aircraftLength,
+        },
+      ],
+    };
+    const chartCanvas = document
+      .getElementById("analytics-chart")
+      .getContext("2d");
+    new Chart(chartCanvas, {
+      type: "bar",
+      data: analyticsData,
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
         },
       },
-    },
-  });
+    });
+  } catch (err) {
+    console.log(err);
+  }
 }
+
 document.addEventListener("DOMContentLoaded", function () {
   displayAnalyticsChart();
 });
@@ -237,7 +224,7 @@ function parseCustomDateFormat(dateString) {
 function checkFlag(inputDate, hrs) {
   if (!inputDate) {
     if (hrs < 0) return "unserviceable";
-	return "serviceable";
+    return "serviceable";
   }
   const inputDateObject = parseCustomDateFormat(inputDate);
 
