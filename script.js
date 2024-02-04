@@ -6,7 +6,7 @@ const parts = document.getElementById("parts");
 const form = document.getElementById("form");
 const dashboardLink = document.getElementById("dashboard_link");
 const partsLink = document.getElementById("parts_link");
-const formLink = document.getElementById("form_link");
+const formLink = document.getElementById("log_link");
 
 function displayContents(ele) {
   contents.forEach((con) => con.classList.add("hidden"));
