@@ -61,6 +61,17 @@ switchMode.addEventListener("change", function () {
   }
 });
 
+// Current time
+const presentDate = document.querySelector(
+  "#content main .head-title .left span p"
+);
+presentDate.innerText = `${new Date().toLocaleString("en-US", {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+})}`;
+
 // Aircraft dropdown menu
 const dropdown = document.getElementById("custom_dropdown");
 const selectedOption = document.getElementById("selected_option");
@@ -105,6 +116,12 @@ populatePlanesDropdown();
 dropdown.addEventListener("click", () => {
   dropdownContent.classList.toggle("hidden");
   selectedOption.classList.remove("flash");
+});
+
+document.addEventListener("click",(event) => {
+  if (!dropdown.contains(event.target)) {
+    dropdownContent.classList.add("hidden")
+  }
 });
 
 //Bar-chart
