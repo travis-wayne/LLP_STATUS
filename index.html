@@ -97,6 +97,10 @@
                   <a class="active" href="#dashboard">Home</a>
                 </li>
               </ul>
+              <span
+                >Status of life limited parts as at
+                <p></p
+              ></span>
             </div>
           </div>
 
@@ -105,7 +109,7 @@
               <i class="bx bx-stopwatch"></i>
               <span class="text">
                 <h3 id="tat_value">0</h3>
-                <p>Total Landing Time</p>
+                <p>Total Aircraft Time</p>
               </span>
             </li>
             <li>
@@ -203,14 +207,14 @@
               <table>
                 <thead>
                   <tr>
-                    <th>S/N</th>
-                    <th>Description</th>
-                    <th>Part Number</th>
-                    <th>QTY</th>
-                    <th>A/c hrs</th>
-                    <th>Hrs left</th>
-                    <th>Date</th>
-                    <th>flag</th>
+                    <th class="displayTabHead">S/N</th>
+                    <th class="displayTabHead">Description</th>
+                    <th class="displayTabHead">Part Number</th>
+                    <th class="displayTabHead">QTY</th>
+                    <th class="displayTabHead">A/c hrs</th>
+                    <th class="displayTabHead">Hrs left</th>
+                    <th class="displayTabHead">Date</th>
+                    <th class="displayTabHead">flag</th>
                   </tr>
                 </thead>
                 <tbody id="parts_table"></tbody>
@@ -238,7 +242,10 @@
           <section class="features" id="features">
             <div class="container">
               <div class="row">
-                <p id="logformMsg">* Please always remember to select the specified aircraft above</p>
+                <p id="logformMsg">
+                  * Please always remember to select the specified aircraft
+                  above
+                </p>
                 <form id="log_form">
                   <div
                     class="row jumbotron box8"

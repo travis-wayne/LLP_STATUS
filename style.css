@@ -352,6 +352,17 @@ button {
   flex-wrap: wrap;
 }
 
+#content main .head-title .left span {
+  font-size: 18px;
+  color: var(--dark);
+  display: flex;
+  gap: 7px;
+}
+
+#content main .head-title .left span p {
+  font-weight: 600;
+}
+
 #content main .head-title .left h1 {
   font-size: 36px;
   font-weight: 600;
@@ -500,9 +511,11 @@ button {
   font-size: 13px;
   text-align: left;
   border-bottom: 1px solid var(--grey);
+  text-transform: uppercase;
+}
+.displayTabHead {
   border-right: 2px solid var(--dark);
   padding: 0 30px;
-  text-transform: uppercase;
 }
 
 #content main .table-data .order table td {
@@ -539,7 +552,7 @@ button {
 }
 
 #content main .table-data .order table tr td .status.unserviceable {
-  background: #800000;
+  background: var(--red);
 }
 
 #content main .table-data .order table tr td .status.pending {
