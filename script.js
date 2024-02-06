@@ -84,7 +84,7 @@ let tetsohElement = document.querySelector("#tetsoh_value");
 
 async function populatePlanesDropdown() {
   try {
-    const res = await fetch(`http://localhost:5050/api/v1/planes`);
+    const res = await fetch(`https://llp-api.onrender.com/api/v1/planes`);
     const data = await res.json();
 
     data.forEach((dt) => {
@@ -127,7 +127,7 @@ document.addEventListener("click", (event) => {
 //Bar-chart
 async function displayAnalyticsChart() {
   try {
-    const res = await fetch(`http://localhost:5050/api/v1/planes/parts`);
+    const res = await fetch(`https://llp-api.onrender.com/api/v1/planes/parts`);
     const data = await res.json();
     const aircraftArr = data.map((dt) => dt.name);
     const aircraftLength = data.map((dt) => dt.count);
@@ -177,7 +177,9 @@ async function tableData(aircraft) {
     partsTable.innerHTML = ``;
     dashboardTable.innerHTML = ``;
 
-    const res = await fetch(`http://localhost:5050/api/v1/parts/${aircraft}`);
+    const res = await fetch(
+      `https://llp-api.onrender.com/api/v1/parts/${aircraft}`
+    );
     const data = await res.json();
 
     tableTotal.forEach((total) => (total.innerHTML = `(${data.length})`));
@@ -347,7 +349,7 @@ addPartForm.addEventListener("submit", (e) => {
 
 async function addToPart(data) {
   try {
-    const res = await fetch(`http://localhost:5050/api/v1/parts`, {
+    const res = await fetch(`https://llp-api.onrender.com/api/v1/parts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -402,7 +404,7 @@ function timeDifference(takeoff, landing) {
 
 async function logUpdate(data) {
   try {
-    const res = await fetch(`http://localhost:5050/api/v1/logUpdate`, {
+    const res = await fetch(`https://llp-api.onrender.com/api/v1/logUpdate`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -432,14 +434,13 @@ const totalEngineTime = document.getElementById("totalEngineTime");
 const numberOfLandings = document.getElementById("numberOfLandings");
 const addplaneFormMsg = document.getElementById("addplaneFormMsg");
 
-
 addPlaneForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const newData = {
     name: aircraftName.value,
     tat: totalAircraftTime.value,
     tet: totalEngineTime.value,
-    landings: numberOfLandings.value
+    landings: numberOfLandings.value,
   };
 
   addToPlane(newData);
@@ -447,7 +448,7 @@ addPlaneForm.addEventListener("submit", (e) => {
 
 async function addToPlane(data) {
   try {
-    const res = await fetch(`http://localhost:5050/api/v1/planes`, {
+    const res = await fetch(`https://llp-api.onrender.com/api/v1/planes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
