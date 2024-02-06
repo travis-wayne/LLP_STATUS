@@ -113,7 +113,7 @@ async function displayAnalyticsChart() {
     const res = await fetch(`https://llp-api.onrender.com/api/v1/planes/parts`);
     const data = await res.json();
     const aircraftArr = data.map((dt) => dt.name);
-	const aircraftLength = data.map(dt => dt.count)
+    const aircraftLength = data.map((dt) => dt.count);
 
     const analyticsData = {
       labels: aircraftArr,
@@ -318,9 +318,8 @@ addPartForm.addEventListener("submit", (e) => {
     hrsleft: hrsLeft.value || null,
     date: reformatDate(date.value),
   };
-  console.log(newData);
 
-  //   addToPart(newData);
+  addToPart(newData);
 });
 
 async function addToPart(data) {
@@ -336,6 +335,62 @@ async function addToPart(data) {
       addPartFormMsg.innerText = "Part Added";
       addPartFormMsg.style.color = "green";
 
+      setTimeout(() => {
+        location.reload();
+      }, 500);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// Technical log functionalities
+const logForm = document.getElementById("log_form");
+const pilotName = document.getElementById("pilotname");
+const numOfCrew = document.getElementById("crewmen");
+const natureOfFlight = document.getElementById("fnature");
+const numOfLandings = document.getElementById("nooflandings");
+const flightFrom = document.getElementById("nature-from");
+const flightTo = document.getElementById("nature-to");
+const takeoffTime = document.getElementById("takeoff");
+const landingTime = document.getElementById("landings");
+const incident = document.getElementById("incidents");
+const actionsTaken = document.getElementById("actions");
+const logFormMsg = document.getElementById("logformMsg");
+
+logForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+   const logData = {
+     aircraft: localStorage.getItem("aircraft"),
+     ac: timeDifference(takeoffTime.value, landingTime.value),
+     landings: +numOfLandings.value,
+   };
+   logUpdate(logData)
+});
+
+function timeDifference(takeoff, landing) {
+  const startTime = new Date("1970-01-01T" + takeoff);
+  const endTime = new Date("1970-01-01T" + landing);
+
+  const timeDifference = endTime - startTime;
+  const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+  return hours;
+}
+
+async function logUpdate(data) {
+  try {
+    const res = await fetch(`https://llp-api.onrender.com/api/v1/logUpdate`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      logFormMsg.classList.remove("hidden");
+      const inputs = logForm.querySelectorAll("input");
+      inputs.forEach((input) => (input.value = ``));
+      actionsTaken.value = ``;
       setTimeout(() => {
         location.reload();
       }, 500);
