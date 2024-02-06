@@ -744,7 +744,7 @@ canvas {
   cursor: pointer;
 }
 
-.modal_new {
+.modal_new, .addPlaneModal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -793,6 +793,7 @@ canvas {
   transform: translateX(30px);
   color: #fff;
   font-weight: 600;
+  font-size: 13px;
 }
 
 .button .button__icon {
@@ -832,7 +833,7 @@ canvas {
   border: 1px solid var(--blue);
 }
 
-#addPartFormMsg {
+#addPartFormMsg, #addplaneFormMsg {
   margin: 0px auto;
   font-size: 20px;
 }

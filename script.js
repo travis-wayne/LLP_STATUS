@@ -118,9 +118,9 @@ dropdown.addEventListener("click", () => {
   selectedOption.classList.remove("flash");
 });
 
-document.addEventListener("click",(event) => {
+document.addEventListener("click", (event) => {
   if (!dropdown.contains(event.target)) {
-    dropdownContent.classList.add("hidden")
+    dropdownContent.classList.add("hidden");
   }
 });
 
@@ -258,11 +258,19 @@ function checkFlag(inputDate, hrs) {
 const overlay = document.querySelector(".overlay");
 const modal = document.querySelector(".modal_new");
 const addPart = document.getElementById("addPart");
+const modals = document.querySelectorAll("#modal");
+const addPlane = document.getElementById("addPlane");
+const addPlaneModal = document.querySelector(".addPlaneModal");
 
 addPart.addEventListener("click", (e) => {
   e.preventDefault();
   if (!planeHeading.innerText) return;
   openModal();
+});
+addPlane.addEventListener("click", (e) => {
+  e.preventDefault();
+  overlay.classList.remove("hidden");
+  addPlaneModal.classList.remove("hidden");
 });
 
 function openModal() {
@@ -272,7 +280,7 @@ function openModal() {
 
 function closeModal() {
   overlay.classList.add("hidden");
-  modal.classList.add("hidden");
+  modals.forEach((modal) => modal.classList.add("hidden"));
 }
 
 //Add part
@@ -377,12 +385,12 @@ const logFormMsg = document.getElementById("logformMsg");
 
 logForm.addEventListener("submit", (e) => {
   e.preventDefault();
-   const logData = {
-     aircraft: localStorage.getItem("aircraft"),
-     ac: timeDifference(takeoffTime.value, landingTime.value),
-     landings: +numOfLandings.value,
-   };
-   logUpdate(logData)
+  const logData = {
+    aircraft: localStorage.getItem("aircraft"),
+    ac: timeDifference(takeoffTime.value, landingTime.value),
+    landings: +numOfLandings.value,
+  };
+  logUpdate(logData);
 });
 
 function timeDifference(takeoff, landing) {
@@ -404,11 +412,53 @@ async function logUpdate(data) {
       body: JSON.stringify(data),
     });
     if (res.ok) {
-      logFormMsg.innerText = `Logged Successfully`
+      logFormMsg.innerText = `Logged Successfully`;
       logFormMsg.style.color = "green";
       const inputs = logForm.querySelectorAll("input");
       inputs.forEach((input) => (input.value = ``));
       actionsTaken.value = ``;
+      setTimeout(() => {
+        location.reload();
+      }, 500);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// Add aircraft
+const addPlaneForm = document.getElementById("addPlaneForm");
+const aircraftName = document.getElementById("aircraftName");
+const totalAircraftTime = document.getElementById("totalAircraftTime");
+const totalEngineTime = document.getElementById("totalEngineTime");
+const numberOfLandings = document.getElementById("numberOfLandings");
+const addplaneFormMsg = document.getElementById("addplaneFormMsg");
+
+addPlaneForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const newData = {
+    name: aircraftName.value,
+    tat: totalAircraftTime.value,
+    tet: totalEngineTime.value,
+    landings: numberOfLandings.value,
+  };
+
+  addToPlane(newData);
+});
+
+async function addToPlane(data) {
+  try {
+    const res = await fetch(`https://llp-api.onrender.com/api/v1/planes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      addplaneFormMsg.innerText = "Aircraft added";
+      addplaneFormMsg.style.color = "green";
+
       setTimeout(() => {
         location.reload();
       }, 500);
