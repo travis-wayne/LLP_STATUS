@@ -387,7 +387,8 @@ async function logUpdate(data) {
       body: JSON.stringify(data),
     });
     if (res.ok) {
-      logFormMsg.classList.remove("hidden");
+      logFormMsg.innerText = `Logged Successfully`
+      logFormMsg.style.color = "green";
       const inputs = logForm.querySelectorAll("input");
       inputs.forEach((input) => (input.value = ``));
       actionsTaken.value = ``;
