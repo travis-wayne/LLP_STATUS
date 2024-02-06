@@ -171,6 +171,9 @@ document.addEventListener("DOMContentLoaded", function () {
 const partsTable = document.getElementById("parts_table");
 const dashboardTable = document.getElementById("dashboard_table");
 let tableTotal = document.querySelectorAll(".head h3 span");
+const removePartModal = document.querySelector(".modal");
+const modalStatement = document.querySelector(".modal-body");
+const proceedBtn = document.getElementById("proceedBtn");
 
 async function tableData(aircraft) {
   try {
@@ -183,7 +186,8 @@ async function tableData(aircraft) {
     tableTotal.forEach((total) => (total.innerHTML = `(${data.length})`));
     let serial = 1;
     data.map((dt) => {
-      let markup = `<tr>
+      let value = JSON.stringify(dt);
+      let markup = `<tr class="tableTab">
 			<td class="table_cell">${serial++}</td>
 			<td class="table_cell">${dt.description}</td>
 			<td class="table_cell">${dt.number || "-"}</td>
@@ -194,7 +198,7 @@ async function tableData(aircraft) {
 			<td class="table_cell"><button class="status ${checkFlag(
         dt.date,
         dt.hrsleft
-      )}">${checkFlag(dt.date, dt.hrsleft)}</button></td>
+      )}" value='${value}'>${checkFlag(dt.date, dt.hrsleft)}</button></td>
 		</tr>`;
 
       let html = `<tr>
@@ -209,9 +213,30 @@ async function tableData(aircraft) {
       partsTable.insertAdjacentHTML("beforeend", markup);
       dashboardTable.insertAdjacentHTML("beforeend", html);
     });
+    const tabs = document.querySelectorAll(".tableTab");
+    tabs.forEach((tab) => {
+      const statusBtn = tab.querySelectorAll(".status");
+      let tabData;
+      tab.addEventListener("click", () => {
+        statusBtn.forEach((btn) => {
+          tabData = JSON.parse(btn.value);
+          modalStatement.innerText = `Remove ${tabData.description} from ${tabData.aircraft}?`;
+          removePartModal.style.display = "block";
+          overlay.classList.remove("hidden");
+          proceedBtn.addEventListener("click", () => {
+            removeFromPart(tabData.id);
+          });
+        });
+      });
+    });
   } catch (err) {
     console.log(err);
   }
+}
+
+function closeRemoveModal() {
+  removePartModal.style.display = "none";
+  overlay.classList.add("hidden");
 }
 
 // Check Flag function
@@ -432,14 +457,13 @@ const totalEngineTime = document.getElementById("totalEngineTime");
 const numberOfLandings = document.getElementById("numberOfLandings");
 const addplaneFormMsg = document.getElementById("addplaneFormMsg");
 
-
 addPlaneForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const newData = {
     name: aircraftName.value,
     tat: totalAircraftTime.value,
     tet: totalEngineTime.value,
-    landings: numberOfLandings.value
+    landings: numberOfLandings.value,
   };
 
   addToPlane(newData);
@@ -458,6 +482,24 @@ async function addToPlane(data) {
       addplaneFormMsg.innerText = "Aircraft added";
       addplaneFormMsg.style.color = "green";
 
+      setTimeout(() => {
+        location.reload();
+      }, 500);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// Remove parts
+async function removeFromPart(id) {
+  try {
+    const res = await fetch(`http://localhost:5050/api/v1/parts/${id}`, {
+      method: "DELETE",
+    });
+    if (res.ok) {
+      modalStatement.style.color = "green";
+      modalStatement.innerText = "Removed successfully";
       setTimeout(() => {
         location.reload();
       }, 500);
