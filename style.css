@@ -423,7 +423,7 @@ button {
   grid-gap: 24px;
 }
 
-#content main .box-info li .bx {
+#content main .box-info li .bx, #content main .box-info li svg {
   width: 80px;
   height: 80px;
   border-radius: 10px;
@@ -438,7 +438,7 @@ button {
   color: var(--blue);
 }
 
-#content main .box-info li:nth-child(2) .bx {
+#content main .box-info li:nth-child(2) svg {
   background: var(--light-yellow);
   color: var(--yellow);
 }
