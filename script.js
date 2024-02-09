@@ -405,6 +405,13 @@ const landingTime = document.getElementById("landings");
 const incident = document.getElementById("incidents");
 const actionsTaken = document.getElementById("actions");
 const logFormMsg = document.getElementById("logformMsg");
+const engineerName = document.getElementById("engineername")
+const certDate = document.getElementById("certdate")
+const itemMel = document.getElementById("itemmel")
+const openDate = document.getElementById("opendate")
+const certCategory = document.getElementById("category")
+const limitDate = document.getElementById("limitdate")
+
 
 logForm.addEventListener("submit", (e) => {
   e.preventDefault();

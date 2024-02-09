@@ -423,7 +423,7 @@ button {
   grid-gap: 24px;
 }
 
-#content main .box-info li .bx, #content main .box-info li svg {
+#content main .box-info li .bx {
   width: 80px;
   height: 80px;
   border-radius: 10px;
@@ -431,6 +431,17 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#content main .box-info li svg{
+   border-radius: 10px;
+  font-size: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+   width: 80px;
+  height: 80px;
+  padding: 20px;
 }
 
 #content main .box-info li:nth-child(1) .bx {
@@ -867,4 +878,14 @@ canvas {
 }
 .modal-body {
   text-transform: uppercase;
+}
+
+/* Technical log */
+.btn-primary {
+  cursor: pointer;
+  width: 100%;
+}
+
+.cert h2 {
+  margin-bottom: 20px;
 }
