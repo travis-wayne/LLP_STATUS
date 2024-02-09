@@ -386,7 +386,7 @@ button {
 
 #content main .head-title .left .breadcrumb li a {
   color: var(--dark-grey);
-  pointer-events: none;
+  pointer-events: unset;
 }
 
 #content main .head-title .left .breadcrumb li a.active {

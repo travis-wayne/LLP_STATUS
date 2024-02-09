@@ -4,6 +4,7 @@ const contents = document.querySelectorAll(".content_display");
 const dashboard = document.getElementById("dashboard");
 const parts = document.getElementById("parts");
 const form = document.getElementById("form");
+const reviewlogsPage = document.getElementById("review");
 const dashboardLink = document.getElementById("dashboard_link");
 const partsLink = document.getElementById("parts_link");
 const formLink = document.getElementById("log_link");
@@ -26,6 +27,10 @@ function updateDisplay() {
       break;
     case "log":
       displayContents(form);
+      active(formLink);
+      break;
+    case "review":
+      displayContents(reviewlogsPage);
       active(formLink);
       break;
 
@@ -515,3 +520,9 @@ async function removeFromPart(id) {
     console.log(err);
   }
 }
+
+// Review logs
+const reviewLogBtn = document.getElementById("reviewlogs");
+reviewLogBtn.addEventListener("click", () => {
+  window.location.hash = `#review`;
+})

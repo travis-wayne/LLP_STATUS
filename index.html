@@ -204,7 +204,7 @@
               <h1 class="plane_heading"></h1>
               <ul class="breadcrumb">
                 <li>
-                  <a href="#">Dashboard</a>
+                  <a href="#dashboard">Dashboard</a>
                 </li>
                 <li><i class="bx bx-chevron-right"></i></li>
                 <li>
@@ -305,7 +305,7 @@
               <h1>Parts</h1>
               <ul class="breadcrumb">
                 <li>
-                  <a href="#">Dashboard</a>
+                  <a href="#dashboard">Dashboard</a>
                 </li>
                 <li><i class="bx bx-chevron-right"></i></li>
                 <li>
@@ -359,13 +359,62 @@
           </div>
         </section>
 
+        <section class="content_display hidden" id="review">
+          <div class="head-title">
+            <div class="left">
+              <h1>Technical Log</h1>
+              <ul class="breadcrumb">
+                <li>
+                  <a href="#dashboard">Dashboard</a>
+                </li>
+                <li><i class="bx bx-chevron-right"></i></li>
+                <li>
+                  <a href="#log">Logs</a>
+                </li>
+                <li><i class="bx bx-chevron-right"></i></li>
+                <li>
+                  <a class="active" href="#review">Review</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="table-data">
+            <div class="order">
+              <div class="head">
+                <h3>Logs</h3>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Pilot Name</th>
+                    <th>Nature Of Flight</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>SP Okoro</td>
+                    <td>Cargo</td>
+                    <td>Lagos</td>
+                    <td>Asaba</td>
+                    <td>8-MAY-23</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
         <section class="content_display hidden" id="form">
           <div class="head-title">
             <div class="left">
               <h1>Technical Log</h1>
               <ul class="breadcrumb">
                 <li>
-                  <a href="#">Dashboard</a>
+                  <a href="#dashboard">Dashboard</a>
                 </li>
                 <li><i class="bx bx-chevron-right"></i></li>
                 <li>
@@ -373,6 +422,41 @@
                 </li>
               </ul>
             </div>
+
+            <button type="button" class="button" id="reviewlogs">
+              <span class="button__text">Review Logs</span>
+              <span class="button__icon">
+                <svg
+                  viewBox="0 0 48 48"
+                  id="a"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#000000"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <defs>
+                      <style>
+                        .b {
+                          fill: none;
+                          stroke: #ffffff;
+                          stroke-linecap: round;
+                          stroke-linejoin: round;
+                        }
+                      </style>
+                    </defs>
+                    <path
+                      class="b"
+                      d="m40.5,5.5H7.5c-1.1046,0-2,.8954-2,2v33c0,1.1046.8954,2,2,2h33c1.1046,0,2-.8954,2-2V7.5c0-1.1046-.8954-2-2-2Zm-11.5,30H11m26,6.9544v-4.7409h-2.2342c-1.1168,0-2.0158-.8991-2.0158-2.0158v-.5376c0-1.1168.8991-2.0158,2.0158-2.0158h2.2342v-6.6807h-2.4842c-1.1168,0-2.0158-.8991-2.0158-2.0158v-.5376c0-1.1168.8991-2.0158,2.0158-2.0158h2.4842v-6.9307h-2.4842c-1.1168,0-2.0158-.8991-2.0158-2.0158v-.5376c0-1.1168.8991-2.0158,2.0158-2.0158h2.4842v-4.8532m-8,18.9586H11m13-11h-13"
+                    ></path>
+                  </g>
+                </svg>
+              </span>
+            </button>
           </div>
 
           <section class="features" id="features">
