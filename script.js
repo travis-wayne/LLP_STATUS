@@ -782,16 +782,17 @@ function validateFile() {
   if (!allowedExtensions.test(filePath)) {
     addDocMsg.innerText =
       "Invalid file type. Please select a valid file with .jpg, .jpeg, or .png extension.";
-      addDocMsg.style.color = "var(--red)"
+    addDocMsg.style.color = "var(--red)";
     docUpload.value = "";
     docUpload.style.border = "1px solid var(--red)";
     return false;
   }
-  addDocMsg.innerText = ""
+  addDocMsg.innerText = "";
   docUpload.style.border = "1px solid rgba(0,0,0,.15)";
   return true;
 }
-docUpload.addEventListener("input", validateFile)
+
+docUpload.addEventListener("input", validateFile);
 
 addDocForm.addEventListener("submit", (e) => {
   e.preventDefault();

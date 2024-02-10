@@ -910,10 +910,11 @@ canvas {
 
 .review_data {
   margin-top: 40px;
+  width: 90%;
 }
 
 .review_data h2 {
-  margin: 50px;
+  margin: 20px;
 }
 
 .review_row {
