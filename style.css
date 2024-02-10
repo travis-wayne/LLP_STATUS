@@ -433,13 +433,13 @@ button {
   align-items: center;
 }
 
-#content main .box-info li svg{
-   border-radius: 10px;
+#content main .box-info li svg {
+  border-radius: 10px;
   font-size: 36px;
   display: flex;
   justify-content: center;
   align-items: center;
-   width: 80px;
+  width: 80px;
   height: 80px;
   padding: 20px;
 }
@@ -881,11 +881,23 @@ canvas {
 }
 
 /* Technical log */
-.btn-primary {
+.logbtn {
   cursor: pointer;
   width: 100%;
 }
 
 .cert h2 {
   margin-bottom: 20px;
+}
+
+.see_more {
+  padding: 10px;
+  cursor: pointer;
+  background-color: var(--blue);
+  color: #fff;
+  transition: .5s ease;
+}
+
+.see_more:hover {
+  transform: scale(1.04);
 }

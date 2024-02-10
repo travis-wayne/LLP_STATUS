@@ -382,7 +382,7 @@
           <div class="table-data">
             <div class="order">
               <div class="head">
-                <h3>Logs</h3>
+                <h3 id="logTitle">Logs</h3>
               </div>
               <table>
                 <thead>
@@ -392,16 +392,17 @@
                     <th>From</th>
                     <th>To</th>
                     <th>Date</th>
+                    <th></th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
+                <tbody id="reviewTable">
+                  <!-- <tr>
                     <td>SP Okoro</td>
                     <td>Cargo</td>
                     <td>Lagos</td>
                     <td>Asaba</td>
                     <td>8-MAY-23</td>
-                  </tr>
+                  </tr> -->
                 </tbody>
               </table>
             </div>
@@ -646,7 +647,7 @@
                         />
                       </div>
                       <div class="col-sm-6 form-group">
-                        <label for="limitdate">Limited Date</label>
+                        <label for="limitdate">Limit Date</label>
                         <input
                           type="date"
                           class="form-control"
@@ -659,7 +660,10 @@
                     </div>
 
                     <div class="col-sm-12 form-group mb-0">
-                      <button class="btn btn-primary float-right" type="submit">
+                      <button
+                        class="btn btn-primary float-right logbtn"
+                        type="submit"
+                      >
                         Submit
                       </button>
                     </div>

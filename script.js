@@ -32,6 +32,7 @@ function updateDisplay() {
     case "review":
       displayContents(reviewlogsPage);
       active(formLink);
+      reviewLogsTable();
       break;
 
     default:
@@ -39,7 +40,20 @@ function updateDisplay() {
   }
 }
 window.addEventListener("hashchange", updateDisplay);
-window.addEventListener("load", updateDisplay);
+window.addEventListener("load", () => {
+  updateDisplay();
+  const aircraft = localStorage.getItem("aircraft");
+  const tat = localStorage.getItem("tat");
+  const tet = localStorage.getItem("tet");
+  const landings = localStorage.getItem("landings");
+  tableData(aircraft);
+  reviewLogsTable(aircraft);
+  planeHeading.innerText = aircraft;
+  tatElement.innerText = tat;
+  tetElement.innerText = tet;
+  landingsElement.innerText = landings;
+  tetsohElement.innerText = tetElement.innerText;
+});
 
 function active(ele) {
   allSideMenu.forEach((i) => {
@@ -99,7 +113,11 @@ async function populatePlanesDropdown() {
 
       option.addEventListener("click", () => {
         localStorage.setItem("aircraft", dt.name);
+        localStorage.setItem("tat", dt.tat);
+        localStorage.setItem("tet", dt.tet);
+        localStorage.setItem("landings", dt.landings);
         tableData(dt.name);
+        reviewLogsTable(dt.name);
         selectedOption.innerHTML =
           dt.name + `<i class='bx bxs-chevron-down'></i>`;
         planeHeading.innerText = dt.name;
@@ -410,13 +428,12 @@ const landingTime = document.getElementById("landings");
 const incident = document.getElementById("incidents");
 const actionsTaken = document.getElementById("actions");
 const logFormMsg = document.getElementById("logformMsg");
-const engineerName = document.getElementById("engineername")
-const certDate = document.getElementById("certdate")
-const itemMel = document.getElementById("itemmel")
-const openDate = document.getElementById("opendate")
-const certCategory = document.getElementById("category")
-const limitDate = document.getElementById("limitdate")
-
+const engineerName = document.getElementById("engineername");
+const certDate = document.getElementById("certdate");
+const itemMel = document.getElementById("itemmel");
+const openDate = document.getElementById("opendate");
+const certCategory = document.getElementById("category");
+const limitDate = document.getElementById("limitdate");
 
 logForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -426,6 +443,28 @@ logForm.addEventListener("submit", (e) => {
     landings: +numOfLandings.value,
   };
   logUpdate(logData);
+
+  const allLogData = {
+    aircraft: localStorage.getItem("aircraft"),
+    pilot: pilotName.value,
+    crew: numOfCrew.value,
+    nature: natureOfFlight.value,
+    landings: numOfLandings.value,
+    starting: flightFrom.value,
+    destination: flightTo.value,
+    takeoff: takeoffTime.value,
+    landingtime: landingTime.value,
+    incident: incident.value,
+    actiontaken: actionsTaken.value,
+    engineer: engineerName.value,
+    date: certDate.value,
+    itemmel: itemMel.value,
+    opendate: openDate.value,
+    category: certCategory.value,
+    limitdate: limitDate.value,
+    created: new Date(),
+  };
+  addToLog(allLogData);
 });
 
 function timeDifference(takeoff, landing) {
@@ -446,6 +485,20 @@ async function logUpdate(data) {
       },
       body: JSON.stringify(data),
     });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function addToLog(data) {
+  try {
+    const res = await fetch(`http://localhost:5050/api/v1/logs`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
     if (res.ok) {
       logFormMsg.innerText = `Logged Successfully`;
       logFormMsg.style.color = "green";
@@ -454,7 +507,7 @@ async function logUpdate(data) {
       actionsTaken.value = ``;
       setTimeout(() => {
         location.reload();
-      }, 500);
+      }, 1000);
     }
   } catch (err) {
     console.log(err);
@@ -525,4 +578,42 @@ async function removeFromPart(id) {
 const reviewLogBtn = document.getElementById("reviewlogs");
 reviewLogBtn.addEventListener("click", () => {
   window.location.hash = `#review`;
-})
+});
+const logTitle = document.getElementById("logTitle");
+const reviewTable = document.getElementById("reviewTable");
+
+async function reviewLogsTable(aircraft) {
+  try {
+    reviewTable.innerHTML = ``;
+    const res = await fetch(`http://localhost:5050/api/v1/logs/${aircraft}`);
+    const data = await res.json();
+
+    const sortedData = data.sort(
+      (a, b) => new Date(b.created) - new Date(a.created)
+    );
+
+    sortedData.map((dt) => {
+      let value = JSON.stringify(dt);
+      let markup = `<tr>
+                    <td>${dt.pilot}</td>
+                    <td>${dt.nature}</td>
+                    <td>${dt.starting}</td>
+                    <td>${dt.destination}</td>
+                    <td>${reformatDate(dt.date)}</td>
+                    <td><button class="see_more reviewTab" value='${value}'>Review</td>
+                  </tr>`;
+
+      reviewTable.insertAdjacentHTML("beforeend", markup);
+    });
+
+    const reviewTab = document.querySelectorAll(".reviewTab");
+    reviewTab.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const tabData = JSON.parse(tab.value)
+        console.log(tabData);
+      });
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
