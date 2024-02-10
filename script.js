@@ -34,7 +34,6 @@ function updateDisplay() {
     case "review":
       displayContents(reviewlogsPage);
       active(formLink);
-      reviewLogsTable();
       break;
     case "docs":
       displayContents(documentsPage);
@@ -54,6 +53,7 @@ window.addEventListener("load", () => {
   const landings = localStorage.getItem("landings");
   tableData(aircraft);
   reviewLogsTable(aircraft);
+  docTable(aircraft)
   planeHeading.innerText = aircraft;
   tatElement.innerText = tat;
   tetElement.innerText = tet;
@@ -124,6 +124,7 @@ async function populatePlanesDropdown() {
         localStorage.setItem("landings", dt.landings);
         tableData(dt.name);
         reviewLogsTable(dt.name);
+        docTable(dt.name);
         selectedOption.innerHTML =
           dt.name + `<i class='bx bxs-chevron-down'></i>`;
         planeHeading.innerText = dt.name;
@@ -344,7 +345,7 @@ const hrsLeft = document.getElementById("hrsLeft");
 const date = document.getElementById("date");
 const addPartFormMsg = document.getElementById("addPartFormMsg");
 
-function reformatDate(date) {
+function reformatedDate(date) {
   if (!date) return null;
   const originalDate = new Date(date);
   const options = { year: "numeric", month: "short", day: "numeric" };
@@ -413,7 +414,7 @@ async function addToPart(data) {
 
       setTimeout(() => {
         location.reload();
-      }, 500);
+      }, 1000);
     }
   } catch (err) {
     console.log(err);
@@ -604,7 +605,7 @@ async function reviewLogsTable(aircraft) {
                     <td>${dt.nature}</td>
                     <td>${dt.starting}</td>
                     <td>${dt.destination}</td>
-                    <td>${reformatDate(dt.date)}</td>
+                    <td>${reformatedDate(dt.date)}</td>
                     <td><button class="see_more reviewTab" value='${value}'>Review</td>
                   </tr>`;
 
@@ -724,7 +725,7 @@ async function reviewMore(id) {
           </span>
           <span>
             <p>Date</p>
-            <h4>${reformatDate(date)}</h4>
+            <h4>${reformatedDate(date)}</h4>
           </span>
         </div>
         <hr>
@@ -735,7 +736,7 @@ async function reviewMore(id) {
           </span>
           <span>
             <p>Open Date</p>
-            <h4>${reformatDate(opendate)}</h4>
+            <h4>${reformatedDate(opendate)}</h4>
           </span>
         </div>
         <hr>
@@ -746,7 +747,7 @@ async function reviewMore(id) {
           </span>
           <span>
             <p>Limit Date</p>
-            <h4>${reformatDate(limitdate)}</h4>
+            <h4>${reformatedDate(limitdate)}</h4>
           </span>
         </div>
       </div>`;
@@ -797,4 +798,62 @@ docUpload.addEventListener("input", validateFile);
 addDocForm.addEventListener("submit", (e) => {
   e.preventDefault();
   validateFile();
+  if (!validateFile()) return;
+
+  const formData = new FormData();
+
+  formData.append("aircraft", localStorage.getItem("aircraft"));
+  formData.append("title", docTitle.value);
+  formData.append("image", docUpload.files[0]);
+  formData.append("issue", docIssue.value);
+  formData.append("expiring", docExpiring.value);
+
+  addToDocs(formData);
 });
+
+async function addToDocs(data) {
+  try {
+    const res = await fetch(`http://localhost:5050/api/v1/docs`, {
+      method: "POST",
+      body: data,
+    });
+    if (res.ok) {
+      addDocMsg.innerText = "Doc Added";
+      addDocMsg.style.color = "green";
+
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const docsTable = document.getElementById("docs_table");
+
+async function docTable(aircraft) {
+  try {
+    docsTable.innerHTML = ``;
+    const res = await fetch(`http://localhost:5050/api/v1/docs/${aircraft}`);
+    const data = await res.json();
+    const sortedData = data.sort(
+      (a, b) => new Date(b.created) - new Date(a.created)
+    );
+
+    sortedData.map((dt) => {
+      let value = JSON.stringify(dt.photo);
+      let markup = `<tr class="docs_tab">
+                    <td>${dt.title}</td>
+                    <td>${reformatedDate(dt.issue)}</td>
+                    <td>${reformatedDate(dt.expiring)}</td>
+                    <td>
+                      <button class="status ${dt.status}">${dt.status}</button>
+                    </td>
+                  </tr>`;
+      docsTable.insertAdjacentHTML("beforeend", markup);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
