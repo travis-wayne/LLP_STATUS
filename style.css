@@ -758,7 +758,8 @@ canvas {
 
 .modal_new,
 .addPlaneModal,
-.removePart {
+.removePart,
+.review_modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -773,6 +774,11 @@ canvas {
   transition: all 1s ease-out;
   font-family: "Poppins", sans-serif;
   height: fit-content;
+  overflow-y: scroll;
+}
+
+.review_modal{
+  height: 100%;
 }
 
 #closeModal {
@@ -900,4 +906,31 @@ canvas {
 
 .see_more:hover {
   transform: scale(1.04);
+}
+
+.review_data {
+  margin-top: 40px;
+}
+
+.review_data h2 {
+  margin: 50px;
+}
+
+.review_row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.review_column{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.review_row span {
+  display: flex;
+  flex-direction: column;
+  text-transform: capitalize;
 }

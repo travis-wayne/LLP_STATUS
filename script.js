@@ -593,7 +593,7 @@ async function reviewLogsTable(aircraft) {
     );
 
     sortedData.map((dt) => {
-      let value = JSON.stringify(dt);
+      let value = JSON.stringify(dt.id);
       let markup = `<tr>
                     <td>${dt.pilot}</td>
                     <td>${dt.nature}</td>
@@ -609,10 +609,144 @@ async function reviewLogsTable(aircraft) {
     const reviewTab = document.querySelectorAll(".reviewTab");
     reviewTab.forEach((tab) => {
       tab.addEventListener("click", () => {
-        const tabData = JSON.parse(tab.value)
-        console.log(tabData);
+        const tabId = JSON.parse(tab.value);
+        reviewMore(tabId);
       });
     });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const reviewModal = document.querySelector(".review_modal");
+
+async function reviewMore(id) {
+  try {
+    reviewModal.innerHTML = ``;
+    const res = await fetch(`http://localhost:5050/api/v1/logs/id/${id}`);
+    const data = await res.json();
+    const reviewData = data[0];
+
+    const { aircraft,
+        pilot,
+        crew,
+        nature,
+        landings,
+        starting,
+        destination,
+        takeoff,
+        landingtime,
+        incident,
+        actiontaken,
+        engineer,
+        date,
+        itemmel,
+        opendate,
+        category,
+        limitdate } = reviewData
+
+    let markup = `<i class="bx bxs-x-circle" id="closeModal" onclick="closeModal()"></i>
+      <div class="review_data">
+        <div class="review_row">
+          <span>
+            <p>Aircraft</p>
+            <h4>${aircraft.toUpperCase()}</h4></span
+          >
+          <span
+            ><p>Mission</p>
+            <h4>${nature}</h4></span
+          >
+        </div>
+        <hr />
+        <div class="review_row">
+          <span>
+            <p>Pilot</p>
+            <h4>${pilot}</h4></span
+          >
+        </div>
+        <hr />
+        <div class="review_row">
+          <span
+            ><p>Landings</p>
+            <h4>${landings}</h4></span
+          >
+          <span
+            ><p>Crewmen</p>
+            <h4>${crew}</h4></span
+          >
+        </div>
+        <hr />
+        <div class="review_row">
+          <span>
+            <p>From</p>
+            <h4>${starting}</h4></span
+          >
+          <span
+            ><p>To</p>
+            <h4>${destination}</h4></span
+          >
+        </div>
+        <hr />
+        <div class="review_row">
+          <span>
+            <p>Take-off Time</p>
+            <h4>${takeoff}</h4></span
+          >
+          <span
+            ><p>Landing Time</p>
+            <h4>${landingtime}</h4></span
+          >
+        </div>
+        <hr />
+        <div class="review_column">
+          <span>
+            <p>Incidents</p>
+            <h4>${incident}</h4></span
+          >
+          <span
+            ><p>Actions Taken</p>
+            <h4>${actiontaken}</h4></span
+          >
+        </div>
+        <hr />
+        <h2>Certificate Of Release To Service</h2>
+        <div class="review_column">
+          <span>
+            <p>Engineer</p>
+            <h4>${engineer}</h4>
+          </span>
+          <span>
+            <p>Date</p>
+            <h4>${reformatDate(date)}</h4>
+          </span>
+        </div>
+        <hr>
+        <div class="review_row">
+          <span>
+            <p>Item MEL</p>
+            <h4>${itemmel}</h4>
+          </span>
+          <span>
+            <p>Open Date</p>
+            <h4>${reformatDate(opendate)}</h4>
+          </span>
+        </div>
+        <hr>
+        <div class="review_row">
+          <span>
+            <p>Category</p>
+            <h4>${category}</h4>
+          </span>
+          <span>
+            <p>Limit Date</p>
+            <h4>${reformatDate(limitdate)}</h4>
+          </span>
+        </div>
+      </div>`;
+
+    reviewModal.insertAdjacentHTML("beforeend", markup);
+    reviewModal.classList.remove("hidden");
+    overlay.classList.remove("hidden");
   } catch (err) {
     console.log(err);
   }
