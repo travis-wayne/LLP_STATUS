@@ -386,7 +386,7 @@ button {
 
 #content main .head-title .left .breadcrumb li a {
   color: var(--dark-grey);
-  pointer-events: none;
+  pointer-events: unset;
 }
 
 #content main .head-title .left .breadcrumb li a.active {
@@ -439,8 +439,9 @@ button {
 }
 
 #content main .box-info li:nth-child(2) .bx {
-  background: var(--light-yellow);
-  color: var(--yellow);
+  background: var(--dark-grey);
+  color: var(--dark);
+  font-size: 50px;
 }
 
 #content main .box-info li:nth-child(3) .bx {
@@ -449,8 +450,8 @@ button {
 }
 
 #content main .box-info li:nth-child(4) .bx {
-  background: var(--dark-grey);
-  color: var(--dark);
+  background: var(--light-yellow);
+  color: var(--yellow);
 }
 
 #content main .box-info li .text h3 {
@@ -552,11 +553,12 @@ button {
   background: green;
 }
 
-#content main .table-data .order table tr td .status.unserviceable {
+#content main .table-data .order table tr td .status.unserviceable,
+#content main .table-data .order table tr td .status.expired {
   background: var(--red);
 }
 
-#content main .table-data .order table tr td .status.pending {
+#content main .table-data .order table tr td .status.ambient {
   background: var(--orange);
 }
 
@@ -747,14 +749,16 @@ canvas {
 
 .modal_new,
 .addPlaneModal,
-.removePart {
+.removePart,
+.review_modal,
+.add_doc{
   position: fixed;
   top: 50%;
   left: 50%;
   bottom: 0;
   transform: translate(-50%, -50%);
   width: 50%;
-  background-color: var(--light);
+  background-color: var(--grey);
   border-radius: 9px;
   padding: 25px;
   box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
@@ -762,6 +766,39 @@ canvas {
   transition: all 1s ease-out;
   font-family: "Poppins", sans-serif;
   height: fit-content;
+  overflow-y: scroll;
+}
+
+.review_modal {
+  height: 100%;
+}
+.doc_modal {
+ position: fixed;
+  top: 50%;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: 100%;
+   background-color: #333;
+  border-radius: 9px;
+  padding: 25px;
+  z-index: 3000;
+  transition: all 1s ease-out;
+  font-family: "Poppins", sans-serif;
+  height: fit-content;
+  overflow-y: scroll;
+}
+
+.doc_modal img {
+  height: 90dvh;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.doc_modal button {
+  cursor: pointer;
+  float: right;
 }
 
 #closeModal {
@@ -837,17 +874,16 @@ canvas {
 }
 
 #addPartFormMsg,
-#addplaneFormMsg {
+#addplaneFormMsg,
+#addDocMsg,
+#logformMsg {
   margin: 0px auto;
-  font-size: 20px;
+  font-size: 15px;
+  color: var(--dark);
 }
 
 .jumbotron {
   padding: 2.5rem 2rem;
-}
-
-#logformMsg {
-  margin: 0px auto;
 }
 
 .modal {
@@ -868,6 +904,81 @@ canvas {
 .modal-body {
   text-transform: uppercase;
 }
+
+/* Technical log */
+.logbtn {
+  cursor: pointer;
+  width: 100%;
+}
+
+.cert h2 {
+  margin-bottom: 20px;
+  color: var(--dark);
+}
+
+.see_more {
+  padding: 10px;
+  cursor: pointer;
+  background-color: var(--blue);
+  color: #fff;
+  transition: 0.5s ease;
+}
+
+.see_more:hover {
+  transform: scale(1.04);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10000;
+  display: none;
+  overflow: hidden;
+  outline: 0;
+}
+
+.modal button {
+  cursor: pointer;
+}
+.modal-body {
+  text-transform: uppercase;
+}
+
+.review_data {
+  margin-top: 40px;
+  width: 90%;
+}
+
+.review_data h2 {
+  margin: 20px;
+}
+
+.review_row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.review_column {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.review_row span {
+  display: flex;
+  flex-direction: column;
+  text-transform: capitalize;
+}
+
 .form-group label {
   color: var(--dark);
+}
+
+.form-group input, .form-group textarea {
+  background-color: var(--light);
 }
