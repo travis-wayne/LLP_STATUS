@@ -5,9 +5,11 @@ const dashboard = document.getElementById("dashboard");
 const parts = document.getElementById("parts");
 const form = document.getElementById("form");
 const reviewlogsPage = document.getElementById("review");
+const documentsPage = document.getElementById("documents");
 const dashboardLink = document.getElementById("dashboard_link");
 const partsLink = document.getElementById("parts_link");
 const formLink = document.getElementById("log_link");
+const docsLink = document.getElementById("docs_link");
 
 function displayContents(ele) {
   contents.forEach((con) => con.classList.add("hidden"));
@@ -33,6 +35,10 @@ function updateDisplay() {
       displayContents(reviewlogsPage);
       active(formLink);
       reviewLogsTable();
+      break;
+    case "docs":
+      displayContents(documentsPage);
+      active(docsLink);
       break;
 
     default:
@@ -302,7 +308,7 @@ function checkFlag(inputDate, hrs) {
 
 // Overlay and Modal
 const overlay = document.querySelector(".overlay");
-const modal = document.querySelector(".modal_new");
+const addPartModal = document.querySelector(".modal_new");
 const addPart = document.getElementById("addPart");
 const modals = document.querySelectorAll("#modal");
 const addPlane = document.getElementById("addPlane");
@@ -311,15 +317,14 @@ const addPlaneModal = document.querySelector(".addPlaneModal");
 addPart.addEventListener("click", (e) => {
   e.preventDefault();
   if (!planeHeading.innerText) return;
-  openModal();
+  openModal(addPartModal);
 });
 addPlane.addEventListener("click", (e) => {
   e.preventDefault();
-  overlay.classList.remove("hidden");
-  addPlaneModal.classList.remove("hidden");
+  openModal(addPlaneModal);
 });
 
-function openModal() {
+function openModal(modal) {
   overlay.classList.remove("hidden");
   modal.classList.remove("hidden");
 }
@@ -627,23 +632,25 @@ async function reviewMore(id) {
     const data = await res.json();
     const reviewData = data[0];
 
-    const { aircraft,
-        pilot,
-        crew,
-        nature,
-        landings,
-        starting,
-        destination,
-        takeoff,
-        landingtime,
-        incident,
-        actiontaken,
-        engineer,
-        date,
-        itemmel,
-        opendate,
-        category,
-        limitdate } = reviewData
+    const {
+      aircraft,
+      pilot,
+      crew,
+      nature,
+      landings,
+      starting,
+      destination,
+      takeoff,
+      landingtime,
+      incident,
+      actiontaken,
+      engineer,
+      date,
+      itemmel,
+      opendate,
+      category,
+      limitdate,
+    } = reviewData;
 
     let markup = `<i class="bx bxs-x-circle" id="closeModal" onclick="closeModal()"></i>
       <div class="review_data">
@@ -751,3 +758,42 @@ async function reviewMore(id) {
     console.log(err);
   }
 }
+
+// Documents
+const addDoc = document.getElementById("addDoc");
+const addDocModal = document.querySelector(".add_doc");
+
+addDoc.addEventListener("click", (e) => {
+  e.preventDefault();
+  openModal(addDocModal);
+});
+
+const addDocForm = document.getElementById("addDocForm");
+const docTitle = document.getElementById("title");
+const docUpload = document.getElementById("upload");
+const docIssue = document.getElementById("issue");
+const docExpiring = document.getElementById("expiring");
+const addDocMsg = document.getElementById("addDocMsg");
+
+function validateFile() {
+  const filePath = docUpload.value;
+  const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+
+  if (!allowedExtensions.test(filePath)) {
+    addDocMsg.innerText =
+      "Invalid file type. Please select a valid file with .jpg, .jpeg, or .png extension.";
+      addDocMsg.style.color = "var(--red)"
+    docUpload.value = "";
+    docUpload.style.border = "1px solid var(--red)";
+    return false;
+  }
+  addDocMsg.innerText = ""
+  docUpload.style.border = "1px solid rgba(0,0,0,.15)";
+  return true;
+}
+docUpload.addEventListener("input", validateFile)
+
+addDocForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  validateFile();
+});

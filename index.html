@@ -64,6 +64,12 @@
             <span class="text">Logs</span>
           </a>
         </li>
+        <li id="docs_link">
+          <a href="#docs">
+            <i class="bx bxs-file-doc"></i>
+            <span class="text">Documents</span>
+          </a>
+        </li>
       </ul>
     </section>
     <!-- SIDEBAR -->
@@ -673,6 +679,79 @@
             </div>
           </section>
         </section>
+
+        <section class="content_display" id="documents">
+          <div class="head-title">
+            <div class="left">
+              <h1>Documents</h1>
+              <ul class="breadcrumb">
+                <li>
+                  <a href="#dashboard">Dashboard</a>
+                </li>
+                <li><i class="bx bx-chevron-right"></i></li>
+                <li>
+                  <a class="active" href="#docs">Documents</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="table-data">
+            <div class="order">
+              <div class="head">
+                <h3>Docs</h3>
+                <button type="button" class="button" id="addDoc">
+                  <span class="button__text">Add Docs</span>
+                  <span class="button__icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="white"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H11M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V11.8125"
+                        stroke="#fffffff"
+                        stroke-width="2"
+                      ></path>
+                      <path
+                        d="M17 15V18M17 21V18M17 18H14M17 18H20"
+                        stroke="#fffffff"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Issue Date</th>
+                    <th>Expiring Date</th>
+                    <th>Flag</th>
+                  </tr>
+                </thead>
+                <tbody id="docs_table">
+                  <tr class="docs_tab">
+                    <td>Aircraft license</td>
+                    <td>12-MAR-20</td>
+                    <td>13-MAR-24</td>
+                    <td>
+                      <button class="status serviceable">serviceable</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
       </main>
       <!-- MAIN -->
     </section>
@@ -848,9 +927,67 @@
         </div>
       </div>
     </div>
-    <div class="review_modal hidden" id="modal">
-      
+    <div class="review_modal hidden" id="modal"></div>
+    <div class="add_doc hidden" id="modal">
+      <i class="bx bxs-x-circle" id="closeModal" onclick="closeModal()"></i>
+      <div class="container">
+        <div class="row">
+          <p id="addDocMsg">* Document must be file with .jpg, .jpeg, or .png extension</p>
+          <form id="addDocForm">
+            <div class="row jumbotron box8" style="background: transparent">
+              <div class="col-sm-6 form-group">
+                <label for="title">Title</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="title"
+                  id="title"
+                  placeholder=""
+                />
+              </div>
+              <div class="col-sm-6 form-group">
+                <label for="upload">Upload Document</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  name="upload"
+                  id="upload"
+                  placeholder=""
+                />
+              </div>
+              <div class="col-sm-6 form-group">
+                <label for="issue">Issue Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  name="issue"
+                  id="issue"
+                  placeholder=""
+                />
+              </div>
+              <div class="col-sm-6 form-group">
+                <label for="expiring">Expiring Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  name="expiring"
+                  id="expiring"
+                  placeholder=""
+                />
+              </div>
+              
+
+              <div class="col-sm-12 form-group mb-0">
+                <button class="btn btn-primary float-right" type="submit">
+                  Submit
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </body>

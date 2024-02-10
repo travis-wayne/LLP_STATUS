@@ -563,11 +563,12 @@ button {
   background: green;
 }
 
-#content main .table-data .order table tr td .status.unserviceable {
+#content main .table-data .order table tr td .status.unserviceable,
+#content main .table-data .order table tr td .status.expired {
   background: var(--red);
 }
 
-#content main .table-data .order table tr td .status.pending {
+#content main .table-data .order table tr td .status.ambient {
   background: var(--orange);
 }
 
@@ -759,7 +760,8 @@ canvas {
 .modal_new,
 .addPlaneModal,
 .removePart,
-.review_modal {
+.review_modal,
+.add_doc {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -777,7 +779,7 @@ canvas {
   overflow-y: scroll;
 }
 
-.review_modal{
+.review_modal {
   height: 100%;
 }
 
@@ -854,17 +856,15 @@ canvas {
 }
 
 #addPartFormMsg,
-#addplaneFormMsg {
+#addplaneFormMsg,
+#addDocMsg,
+#logformMsg {
   margin: 0px auto;
-  font-size: 20px;
+  font-size: 15px;
 }
 
 .jumbotron {
   padding: 2.5rem 2rem;
-}
-
-#logformMsg {
-  margin: 0px auto;
 }
 
 .modal {
@@ -901,7 +901,7 @@ canvas {
   cursor: pointer;
   background-color: var(--blue);
   color: #fff;
-  transition: .5s ease;
+  transition: 0.5s ease;
 }
 
 .see_more:hover {
@@ -916,13 +916,13 @@ canvas {
   margin: 50px;
 }
 
-.review_row{
+.review_row {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.review_column{
+.review_column {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
