@@ -54,6 +54,7 @@ window.addEventListener("load", () => {
   tableData(aircraft);
   reviewLogsTable(aircraft);
   docTable(aircraft);
+  selectedOption.innerHTML = aircraft + `<i class='bx bxs-chevron-down'></i>`;
   planeHeading.innerText = aircraft;
   tatElement.innerText = tat;
   tetElement.innerText = tet;

@@ -433,17 +433,6 @@ button {
   align-items: center;
 }
 
-#content main .box-info li svg {
-  border-radius: 10px;
-  font-size: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80px;
-  height: 80px;
-  padding: 20px;
-}
-
 #content main .box-info li:nth-child(1) .bx {
   background: var(--light-blue);
   color: var(--blue);
@@ -452,6 +441,7 @@ button {
 #content main .box-info li:nth-child(2) .bx {
   background: var(--dark-grey);
   color: var(--dark);
+  font-size: 50px;
 }
 
 #content main .box-info li:nth-child(3) .bx {
@@ -769,7 +759,7 @@ canvas {
   bottom: 0;
   transform: translate(-50%, -50%);
   width: 50%;
-  background-color: var(--light);
+  background-color: var(--grey);
   border-radius: 9px;
   padding: 25px;
   box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
@@ -890,6 +880,7 @@ canvas {
 #logformMsg {
   margin: 0px auto;
   font-size: 15px;
+  color: var(--dark);
 }
 
 .jumbotron {
@@ -923,6 +914,7 @@ canvas {
 
 .cert h2 {
   margin-bottom: 20px;
+  color: var(--dark);
 }
 
 .see_more {
@@ -963,4 +955,12 @@ canvas {
   display: flex;
   flex-direction: column;
   text-transform: capitalize;
+}
+
+.form-group label {
+  color: var(--dark);
+}
+
+.form-group input, .form-group textarea {
+  background-color: var(--light);
 }
