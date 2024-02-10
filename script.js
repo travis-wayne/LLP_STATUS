@@ -4,9 +4,12 @@ const contents = document.querySelectorAll(".content_display");
 const dashboard = document.getElementById("dashboard");
 const parts = document.getElementById("parts");
 const form = document.getElementById("form");
+const reviewlogsPage = document.getElementById("review");
+const documentsPage = document.getElementById("documents");
 const dashboardLink = document.getElementById("dashboard_link");
 const partsLink = document.getElementById("parts_link");
 const formLink = document.getElementById("log_link");
+const docsLink = document.getElementById("docs_link");
 
 function displayContents(ele) {
   contents.forEach((con) => con.classList.add("hidden"));
@@ -28,13 +31,36 @@ function updateDisplay() {
       displayContents(form);
       active(formLink);
       break;
+    case "review":
+      displayContents(reviewlogsPage);
+      active(formLink);
+      break;
+    case "docs":
+      displayContents(documentsPage);
+      active(docsLink);
+      break;
 
     default:
       break;
   }
 }
 window.addEventListener("hashchange", updateDisplay);
-window.addEventListener("load", updateDisplay);
+window.addEventListener("load", () => {
+  updateDisplay();
+  const aircraft = localStorage.getItem("aircraft");
+  const tat = localStorage.getItem("tat");
+  const tet = localStorage.getItem("tet");
+  const landings = localStorage.getItem("landings");
+  tableData(aircraft);
+  reviewLogsTable(aircraft);
+  docTable(aircraft);
+  selectedOption.innerHTML = aircraft + `<i class='bx bxs-chevron-down'></i>`;
+  planeHeading.innerText = aircraft;
+  tatElement.innerText = tat;
+  tetElement.innerText = tet;
+  landingsElement.innerText = landings;
+  tetsohElement.innerText = tetElement.innerText;
+});
 
 function active(ele) {
   allSideMenu.forEach((i) => {
@@ -94,7 +120,12 @@ async function populatePlanesDropdown() {
 
       option.addEventListener("click", () => {
         localStorage.setItem("aircraft", dt.name);
+        localStorage.setItem("tat", dt.tat);
+        localStorage.setItem("tet", dt.tet);
+        localStorage.setItem("landings", dt.landings);
         tableData(dt.name);
+        reviewLogsTable(dt.name);
+        docTable(dt.name);
         selectedOption.innerHTML =
           dt.name + `<i class='bx bxs-chevron-down'></i>`;
         planeHeading.innerText = dt.name;
@@ -281,7 +312,7 @@ function checkFlag(inputDate, hrs) {
 
 // Overlay and Modal
 const overlay = document.querySelector(".overlay");
-const modal = document.querySelector(".modal_new");
+const addPartModal = document.querySelector(".modal_new");
 const addPart = document.getElementById("addPart");
 const modals = document.querySelectorAll("#modal");
 const addPlane = document.getElementById("addPlane");
@@ -290,15 +321,14 @@ const addPlaneModal = document.querySelector(".addPlaneModal");
 addPart.addEventListener("click", (e) => {
   e.preventDefault();
   if (!planeHeading.innerText) return;
-  openModal();
+  openModal(addPartModal);
 });
 addPlane.addEventListener("click", (e) => {
   e.preventDefault();
-  overlay.classList.remove("hidden");
-  addPlaneModal.classList.remove("hidden");
+  openModal(addPlaneModal);
 });
 
-function openModal() {
+function openModal(modal) {
   overlay.classList.remove("hidden");
   modal.classList.remove("hidden");
 }
@@ -318,7 +348,7 @@ const hrsLeft = document.getElementById("hrsLeft");
 const date = document.getElementById("date");
 const addPartFormMsg = document.getElementById("addPartFormMsg");
 
-function reformatDate(date) {
+function reformatedDate(date) {
   if (!date) return null;
   const originalDate = new Date(date);
   const options = { year: "numeric", month: "short", day: "numeric" };
@@ -387,7 +417,7 @@ async function addToPart(data) {
 
       setTimeout(() => {
         location.reload();
-      }, 500);
+      }, 1000);
     }
   } catch (err) {
     console.log(err);
@@ -407,6 +437,12 @@ const landingTime = document.getElementById("landings");
 const incident = document.getElementById("incidents");
 const actionsTaken = document.getElementById("actions");
 const logFormMsg = document.getElementById("logformMsg");
+const engineerName = document.getElementById("engineername");
+const certDate = document.getElementById("certdate");
+const itemMel = document.getElementById("itemmel");
+const openDate = document.getElementById("opendate");
+const certCategory = document.getElementById("category");
+const limitDate = document.getElementById("limitdate");
 
 logForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -416,6 +452,28 @@ logForm.addEventListener("submit", (e) => {
     landings: +numOfLandings.value,
   };
   logUpdate(logData);
+
+  const allLogData = {
+    aircraft: localStorage.getItem("aircraft"),
+    pilot: pilotName.value,
+    crew: numOfCrew.value,
+    nature: natureOfFlight.value,
+    landings: numOfLandings.value,
+    starting: flightFrom.value,
+    destination: flightTo.value,
+    takeoff: takeoffTime.value,
+    landingtime: landingTime.value,
+    incident: incident.value,
+    actiontaken: actionsTaken.value,
+    engineer: engineerName.value,
+    date: certDate.value,
+    itemmel: itemMel.value,
+    opendate: openDate.value,
+    category: certCategory.value,
+    limitdate: limitDate.value,
+    created: new Date(),
+  };
+  addToLog(allLogData);
 });
 
 function timeDifference(takeoff, landing) {
@@ -436,6 +494,20 @@ async function logUpdate(data) {
       },
       body: JSON.stringify(data),
     });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function addToLog(data) {
+  try {
+    const res = await fetch(`https://llp-api.onrender.com/api/v1/logs`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
     if (res.ok) {
       logFormMsg.innerText = `Logged Successfully`;
       logFormMsg.style.color = "green";
@@ -444,7 +516,7 @@ async function logUpdate(data) {
       actionsTaken.value = ``;
       setTimeout(() => {
         location.reload();
-      }, 500);
+      }, 1000);
     }
   } catch (err) {
     console.log(err);
@@ -509,4 +581,316 @@ async function removeFromPart(id) {
   } catch (err) {
     console.log(err);
   }
+}
+
+// Review logs
+const reviewLogBtn = document.getElementById("reviewlogs");
+reviewLogBtn.addEventListener("click", () => {
+  window.location.hash = `#review`;
+});
+const logTitle = document.getElementById("logTitle");
+const reviewTable = document.getElementById("reviewTable");
+
+async function reviewLogsTable(aircraft) {
+  try {
+    reviewTable.innerHTML = ``;
+    const res = await fetch(
+      `https://llp-api.onrender.com/api/v1/logs/${aircraft}`
+    );
+    const data = await res.json();
+
+    const sortedData = data.sort(
+      (a, b) => new Date(b.created) - new Date(a.created)
+    );
+
+    sortedData.map((dt) => {
+      let value = JSON.stringify(dt.id);
+      let markup = `<tr>
+                    <td>${dt.pilot}</td>
+                    <td>${dt.nature}</td>
+                    <td>${dt.starting}</td>
+                    <td>${dt.destination}</td>
+                    <td>${reformatedDate(dt.date)}</td>
+                    <td><button class="see_more reviewTab" value='${value}'>Review</td>
+                  </tr>`;
+
+      reviewTable.insertAdjacentHTML("beforeend", markup);
+    });
+
+    const reviewTab = document.querySelectorAll(".reviewTab");
+    reviewTab.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const tabId = JSON.parse(tab.value);
+        reviewMore(tabId);
+      });
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const reviewModal = document.querySelector(".review_modal");
+
+async function reviewMore(id) {
+  try {
+    reviewModal.innerHTML = ``;
+    const res = await fetch(
+      `https://llp-api.onrender.com/api/v1/logs/id/${id}`
+    );
+    const data = await res.json();
+    const reviewData = data[0];
+
+    const {
+      aircraft,
+      pilot,
+      crew,
+      nature,
+      landings,
+      starting,
+      destination,
+      takeoff,
+      landingtime,
+      incident,
+      actiontaken,
+      engineer,
+      date,
+      itemmel,
+      opendate,
+      category,
+      limitdate,
+    } = reviewData;
+
+    let markup = `<i class="bx bxs-x-circle" id="closeModal" onclick="closeModal()"></i>
+      <div class="review_data">
+        <div class="review_row">
+          <span>
+            <p>Aircraft</p>
+            <h4>${aircraft.toUpperCase()}</h4></span
+          >
+          <span
+            ><p>Mission</p>
+            <h4>${nature}</h4></span
+          >
+        </div>
+        <hr />
+        <div class="review_row">
+          <span>
+            <p>Pilot</p>
+            <h4>${pilot}</h4></span
+          >
+        </div>
+        <hr />
+        <div class="review_row">
+          <span
+            ><p>Landings</p>
+            <h4>${landings}</h4></span
+          >
+          <span
+            ><p>Crewmen</p>
+            <h4>${crew}</h4></span
+          >
+        </div>
+        <hr />
+        <div class="review_row">
+          <span>
+            <p>From</p>
+            <h4>${starting}</h4></span
+          >
+          <span
+            ><p>To</p>
+            <h4>${destination}</h4></span
+          >
+        </div>
+        <hr />
+        <div class="review_row">
+          <span>
+            <p>Take-off Time</p>
+            <h4>${takeoff}</h4></span
+          >
+          <span
+            ><p>Landing Time</p>
+            <h4>${landingtime}</h4></span
+          >
+        </div>
+        <hr />
+        <div class="review_column">
+          <span>
+            <p>Incidents</p>
+            <h4>${incident}</h4></span
+          >
+          <span
+            ><p>Actions Taken</p>
+            <h4>${actiontaken}</h4></span
+          >
+        </div>
+        <hr />
+        <h2>Certificate Of Release To Service</h2>
+        <div class="review_column">
+          <span>
+            <p>Engineer</p>
+            <h4>${engineer}</h4>
+          </span>
+          <span>
+            <p>Date</p>
+            <h4>${reformatedDate(date)}</h4>
+          </span>
+        </div>
+        <hr>
+        <div class="review_row">
+          <span>
+            <p>Item MEL</p>
+            <h4>${itemmel}</h4>
+          </span>
+          <span>
+            <p>Open Date</p>
+            <h4>${reformatedDate(opendate)}</h4>
+          </span>
+        </div>
+        <hr>
+        <div class="review_row">
+          <span>
+            <p>Category</p>
+            <h4>${category}</h4>
+          </span>
+          <span>
+            <p>Limit Date</p>
+            <h4>${reformatedDate(limitdate)}</h4>
+          </span>
+        </div>
+      </div>`;
+
+    reviewModal.insertAdjacentHTML("beforeend", markup);
+    reviewModal.classList.remove("hidden");
+    overlay.classList.remove("hidden");
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// Documents
+const addDoc = document.getElementById("addDoc");
+const addDocModal = document.querySelector(".add_doc");
+
+addDoc.addEventListener("click", (e) => {
+  e.preventDefault();
+  openModal(addDocModal);
+});
+
+const addDocForm = document.getElementById("addDocForm");
+const docTitle = document.getElementById("title");
+const docUpload = document.getElementById("upload");
+const docIssue = document.getElementById("issue");
+const docExpiring = document.getElementById("expiring");
+const addDocMsg = document.getElementById("addDocMsg");
+
+function validateFile() {
+  const filePath = docUpload.value;
+  const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+
+  if (!allowedExtensions.test(filePath)) {
+    addDocMsg.innerText =
+      "Invalid file type. Please select a valid file with .jpg, .jpeg, or .png extension.";
+    addDocMsg.style.color = "var(--red)";
+    docUpload.value = "";
+    docUpload.style.border = "1px solid var(--red)";
+    return false;
+  }
+  addDocMsg.innerText = "";
+  docUpload.style.border = "1px solid rgba(0,0,0,.15)";
+  return true;
+}
+
+docUpload.addEventListener("input", validateFile);
+
+addDocForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  validateFile();
+  if (!validateFile()) return;
+
+  const formData = new FormData();
+
+  formData.append("aircraft", localStorage.getItem("aircraft"));
+  formData.append("title", docTitle.value);
+  formData.append("image", docUpload.files[0]);
+  formData.append("issue", docIssue.value);
+  formData.append("expiring", docExpiring.value);
+
+  addToDocs(formData);
+});
+
+async function addToDocs(data) {
+  try {
+    const res = await fetch(`https://llp-api.onrender.com/api/v1/docs`, {
+      method: "POST",
+      body: data,
+    });
+    if (res.ok) {
+      addDocMsg.innerText = "Document Added";
+      addDocMsg.style.color = "green";
+
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const docsTable = document.getElementById("docs_table");
+
+async function docTable(aircraft) {
+  try {
+    docsTable.innerHTML = ``;
+    const res = await fetch(
+      `https://llp-api.onrender.com/api/v1/docs/${aircraft}`
+    );
+    const data = await res.json();
+    const sortedData = data.sort(
+      (a, b) => new Date(b.created) - new Date(a.created)
+    );
+
+    sortedData.map((dt) => {
+      let value = JSON.stringify({ title: dt.title, photo: dt.photo });
+      let markup = `<tr class="docs_tab">
+                    <td>${dt.title}</td>
+                    <td>${reformatedDate(dt.issue)}</td>
+                    <td>${reformatedDate(dt.expiring)}</td>
+                    <td>
+                      <button class="status ${dt.status}" value='${value}'>${
+        dt.status
+      }</button>
+                    </td>
+                  </tr>`;
+      docsTable.insertAdjacentHTML("beforeend", markup);
+    });
+
+    const tableTab = document.querySelectorAll(".docs_tab");
+    tableTab.forEach((tab) => {
+      const statusBtn = tab.querySelector(".status");
+      tab.addEventListener("click", () => {
+        let docData = JSON.parse(statusBtn.value);
+        docViewer(docData);
+      });
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const docModal = document.querySelector(".doc_modal");
+function docViewer(data) {
+  docModal.innerHTML = ``;
+  let markup = `<div>
+        <img
+          src="${data.photo}"
+          alt="${data.title}"
+        />
+        <button type="button" class="btn btn-secondary" onclick="closeModal()">
+          Done
+        </button>
+      </div>`;
+  docModal.insertAdjacentHTML("beforeend", markup);
+  docModal.classList.remove("hidden");
+  overlay.classList.remove("hidden");
 }
