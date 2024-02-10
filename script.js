@@ -53,7 +53,7 @@ window.addEventListener("load", () => {
   const landings = localStorage.getItem("landings");
   tableData(aircraft);
   reviewLogsTable(aircraft);
-  docTable(aircraft)
+  docTable(aircraft);
   planeHeading.innerText = aircraft;
   tatElement.innerText = tat;
   tetElement.innerText = tet;
@@ -818,7 +818,7 @@ async function addToDocs(data) {
       body: data,
     });
     if (res.ok) {
-      addDocMsg.innerText = "Doc Added";
+      addDocMsg.innerText = "Document Added";
       addDocMsg.style.color = "green";
 
       setTimeout(() => {
@@ -842,18 +842,46 @@ async function docTable(aircraft) {
     );
 
     sortedData.map((dt) => {
-      let value = JSON.stringify(dt.photo);
+      let value = JSON.stringify({ title: dt.title, photo: dt.photo });
       let markup = `<tr class="docs_tab">
                     <td>${dt.title}</td>
                     <td>${reformatedDate(dt.issue)}</td>
                     <td>${reformatedDate(dt.expiring)}</td>
                     <td>
-                      <button class="status ${dt.status}">${dt.status}</button>
+                      <button class="status ${dt.status}" value='${value}'>${
+        dt.status
+      }</button>
                     </td>
                   </tr>`;
       docsTable.insertAdjacentHTML("beforeend", markup);
     });
+
+    const tableTab = document.querySelectorAll(".docs_tab");
+    tableTab.forEach((tab) => {
+      const statusBtn = tab.querySelector(".status");
+      tab.addEventListener("click", () => {
+        let docData = JSON.parse(statusBtn.value);
+        docViewer(docData);
+      });
+    });
   } catch (err) {
     console.log(err);
   }
+}
+
+const docModal = document.querySelector(".doc_modal");
+function docViewer(data) {
+  docModal.innerHTML = ``;
+  let markup = `<div>
+        <img
+          src="${data.photo}"
+          alt="${data.title}"
+        />
+        <button type="button" class="btn btn-secondary" onclick="closeModal()">
+          Done
+        </button>
+      </div>`;
+  docModal.insertAdjacentHTML("beforeend", markup);
+  docModal.classList.remove("hidden");
+  overlay.classList.remove("hidden");
 }

@@ -449,9 +449,9 @@ button {
   color: var(--blue);
 }
 
-#content main .box-info li:nth-child(2) svg {
-  background: var(--light-yellow);
-  color: var(--yellow);
+#content main .box-info li:nth-child(2) .bx {
+  background: var(--dark-grey);
+  color: var(--dark);
 }
 
 #content main .box-info li:nth-child(3) .bx {
@@ -460,8 +460,8 @@ button {
 }
 
 #content main .box-info li:nth-child(4) .bx {
-  background: var(--dark-grey);
-  color: var(--dark);
+  background: var(--light-yellow);
+  color: var(--yellow);
 }
 
 #content main .box-info li .text h3 {
@@ -761,7 +761,8 @@ canvas {
 .addPlaneModal,
 .removePart,
 .review_modal,
-.add_doc {
+.add_doc
+ {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -781,6 +782,34 @@ canvas {
 
 .review_modal {
   height: 100%;
+}
+.doc_modal {
+ position: fixed;
+  top: 50%;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: 100%;
+   background-color: #333;
+  border-radius: 9px;
+  padding: 25px;
+  z-index: 3000;
+  transition: all 1s ease-out;
+  font-family: "Poppins", sans-serif;
+  height: fit-content;
+  overflow-y: scroll;
+}
+
+.doc_modal img {
+  height: 90dvh;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.doc_modal button {
+  cursor: pointer;
+  float: right;
 }
 
 #closeModal {
