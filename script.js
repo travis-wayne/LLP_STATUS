@@ -54,8 +54,8 @@ window.addEventListener("load", () => {
   tableData(aircraft);
   reviewLogsTable(aircraft);
   docTable(aircraft);
-  selectedOption.innerHTML =
-    aircraft + `<i class='bx bxs-chevron-down'></i>` &&
+  selectedOption.innerHTML = aircraft ?
+    aircraft + `<i class='bx bxs-chevron-down'></i>` :
     `Select Aircraft <i class="bx bxs-chevron-down"></i>`;
   planeHeading.innerText = aircraft;
   tatElement.innerText = tat;
@@ -400,6 +400,7 @@ addPartForm.addEventListener("submit", (e) => {
     date: reformatDate(date.value),
   };
 
+  renderSpinner(addPartForm);
   addToPart(newData);
 });
 
@@ -474,6 +475,8 @@ logForm.addEventListener("submit", (e) => {
     limitdate: limitDate.value,
     created: new Date(),
   };
+
+  renderSpinner(logForm);
   addToLog(allLogData);
 });
 
@@ -541,6 +544,7 @@ addPlaneForm.addEventListener("submit", (e) => {
     landings: numberOfLandings.value,
   };
 
+  renderSpinner(addPlaneForm)
   addToPlane(newData);
 });
 
@@ -812,6 +816,7 @@ addDocForm.addEventListener("submit", (e) => {
   formData.append("issue", docIssue.value);
   formData.append("expiring", docExpiring.value);
 
+  renderSpinner(addDocForm);
   addToDocs(formData);
 });
 
@@ -911,4 +916,20 @@ async function removeDoc(id) {
   } catch (err) {
     console.log(err);
   }
+}
+
+function renderSpinner(parentEle) {
+  const html = `
+      <div class="dot-spinner">
+    <div class="dot-spinner__dot"></div>
+    <div class="dot-spinner__dot"></div>
+    <div class="dot-spinner__dot"></div>
+    <div class="dot-spinner__dot"></div>
+    <div class="dot-spinner__dot"></div>
+    <div class="dot-spinner__dot"></div>
+    <div class="dot-spinner__dot"></div>
+    <div class="dot-spinner__dot"></div>
+</div>
+  `;
+  parentEle.insertAdjacentHTML("beforeend", html);
 }
