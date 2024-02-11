@@ -799,7 +799,18 @@ canvas {
 
 .doc_modal button {
   cursor: pointer;
+  border: none;
+  margin-bottom: 10px;
+}
+
+.doc_modal .btn-secondary {
+  cursor: pointer;
   float: right;
+}
+
+.doc_modal .btn-primary {
+  background: var(--red);
+  color: #fff;
 }
 
 #closeModal {

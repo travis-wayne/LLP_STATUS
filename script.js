@@ -54,7 +54,9 @@ window.addEventListener("load", () => {
   tableData(aircraft);
   reviewLogsTable(aircraft);
   docTable(aircraft);
-  selectedOption.innerHTML = aircraft + `<i class='bx bxs-chevron-down'></i>`;
+  selectedOption.innerHTML =
+    aircraft + `<i class='bx bxs-chevron-down'></i>` &&
+    `Select Aircraft <i class="bx bxs-chevron-down"></i>`;
   planeHeading.innerText = aircraft;
   tatElement.innerText = tat;
   tetElement.innerText = tet;
@@ -254,7 +256,8 @@ async function tableData(aircraft) {
           modalStatement.innerText = `Remove ${tabData.description} from ${tabData.aircraft}?`;
           removePartModal.style.display = "block";
           overlay.classList.remove("hidden");
-          proceedBtn.addEventListener("click", () => {
+          proceedBtn.addEventListener("click", (e) => {
+            e.preventDefault();
             removeFromPart(tabData.id);
           });
         });
@@ -779,11 +782,11 @@ const addDocMsg = document.getElementById("addDocMsg");
 
 function validateFile() {
   const filePath = docUpload.value;
-  const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+  const allowedExtensions = /(\.pdf)$/i;
 
   if (!allowedExtensions.test(filePath)) {
     addDocMsg.innerText =
-      "Invalid file type. Please select a valid file with .jpg, .jpeg, or .png extension.";
+      "Invalid file type. Please select a valid file with .pdf extension.";
     addDocMsg.style.color = "var(--red)";
     docUpload.value = "";
     docUpload.style.border = "1px solid var(--red)";
@@ -843,7 +846,11 @@ async function docTable(aircraft) {
     );
 
     sortedData.map((dt) => {
-      let value = JSON.stringify({ title: dt.title, photo: dt.photo });
+      let value = JSON.stringify({
+        id: dt.id,
+        title: dt.title,
+        photo: dt.photo,
+      });
       let markup = `<tr class="docs_tab">
                     <td>${dt.title}</td>
                     <td>${reformatedDate(dt.issue)}</td>
@@ -874,15 +881,34 @@ const docModal = document.querySelector(".doc_modal");
 function docViewer(data) {
   docModal.innerHTML = ``;
   let markup = `<div>
-        <img
-          src="${data.photo}"
-          alt="${data.title}"
-        />
+        <iframe src="https://docs.google.com/gview?url=${data.photo}&embedded=true" style="width:100%; height:600px;" frameborder="0"></iframe>
+        <button type="button" class="btn btn-primary" id="delete_doc">
+              Delete
+            </button>
         <button type="button" class="btn btn-secondary" onclick="closeModal()">
-          Done
+          Close
         </button>
       </div>`;
   docModal.insertAdjacentHTML("beforeend", markup);
   docModal.classList.remove("hidden");
   overlay.classList.remove("hidden");
+
+  const deleteBtn = document.getElementById("delete_doc");
+  deleteBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    removeDoc(data.id);
+  });
+}
+
+async function removeDoc(id) {
+  try {
+    const res = await fetch(`http://localhost:5050/api/v1/docs/${id}`, {
+      method: "DELETE",
+    });
+    if (res.ok) {
+      location.reload();
+    }
+  } catch (err) {
+    console.log(err);
+  }
 }
