@@ -195,6 +195,33 @@
             </svg>
           </span>
         </button>
+        <button type="button" class="button deleteBtn" id="removeAircraft">
+          <span class="button__text"
+            >Remove <br />
+            Aircraft</span>
+          <span class="button__icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M10.9393 12L6.9696 15.9697L8.03026 17.0304L12 13.0607L15.9697 17.0304L17.0304 15.9697L13.0607 12L17.0303 8.03039L15.9696 6.96973L12 10.9393L8.03038 6.96973L6.96972 8.03039L10.9393 12Z"
+                  fill="#ffffff"
+                ></path>
+              </g>
+            </svg>
+          </span>
+        </button>
         <div class="mode">
           <input type="checkbox" id="switch-mode" hidden />
           <label for="switch-mode" class="switch-mode"></label>
@@ -868,7 +895,7 @@
         </div>
       </div>
     </div>
-    <div class="modal">
+    <div class="modal" id="removePartModal">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -880,7 +907,7 @@
               Remove Part!
             </h5>
           </div>
-          <div class="modal-body"></div>
+          <div class="modal-body" id="removeAircraftModalStatement"></div>
           <div class="modal-footer">
             <button
               type="button"
@@ -890,6 +917,34 @@
               Close
             </button>
             <button type="button" class="btn btn-primary" id="proceedBtn">
+              Proceed
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="removeAircraftModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5
+              class="modal-title"
+              id="exampleModalLabel"
+              style="color: var(--red)"
+            >
+              Remove Aircraft!
+            </h5>
+          </div>
+          <div class="modal-body" id="removedAircraft"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="closeRemoveModal()"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" id="deleteAircraftBtn">
               Proceed
             </button>
           </div>
@@ -956,7 +1011,7 @@
       </div>
     </div>
     <div class="doc_modal hidden" id="modal"></div>
-    
+
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </body>
