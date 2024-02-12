@@ -122,6 +122,7 @@ async function populatePlanesDropdown() {
 
       option.addEventListener("click", () => {
         localStorage.setItem("aircraft", dt.name);
+        localStorage.setItem("aircraftID", dt.id);
         localStorage.setItem("tat", dt.tat);
         localStorage.setItem("tet", dt.tet);
         localStorage.setItem("landings", dt.landings);
@@ -204,9 +205,10 @@ document.addEventListener("DOMContentLoaded", function () {
 const partsTable = document.getElementById("parts_table");
 const dashboardTable = document.getElementById("dashboard_table");
 let tableTotal = document.querySelectorAll(".head h3 span");
-const removePartModal = document.querySelector(".modal");
-const modalStatement = document.querySelector(".modal-body");
+const removePartModal = document.querySelector("#removePartModal");
+const modalStatement = document.querySelector("#removeAircraftModalStatement");
 const proceedBtn = document.getElementById("proceedBtn");
+const removeAllModals = document.querySelectorAll(".modal");
 
 async function tableData(aircraft) {
   try {
@@ -271,7 +273,7 @@ async function tableData(aircraft) {
 }
 
 function closeRemoveModal() {
-  removePartModal.style.display = "none";
+  removeAllModals.forEach((modal) => (modal.style.display = "none"));
   overlay.classList.add("hidden");
 }
 
@@ -563,6 +565,49 @@ async function addToPlane(data) {
       addplaneFormMsg.innerText = "Aircraft added";
       addplaneFormMsg.style.color = "green";
 
+      const apiData = await res.json();
+      localStorage.setItem("aircraft", apiData[0].name);
+      localStorage.setItem("aircraftID", apiData[0].id);
+      localStorage.setItem("tat", apiData[0].tat);
+      localStorage.setItem("tet", apiData[0].tet);
+      localStorage.setItem("landings", apiData[0].landings);
+
+      setTimeout(() => {
+        location.reload();
+      }, 500);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// Remove Planes
+const removeAircraftBtn = document.getElementById("removeAircraft");
+const removeAircraftModal = document.getElementById("removeAircraftModal");
+const removedAircraft = document.getElementById("removedAircraft");
+const deleteAircraftBtn = document.getElementById("deleteAircraftBtn");
+
+removeAircraftBtn.addEventListener("click", () => {
+  const aircraft = localStorage.getItem("aircraft");
+  const id = localStorage.getItem("aircraftID");
+  removedAircraft.innerText = `Remove ${aircraft}?`;
+  removeAircraftModal.style.display = "block";
+  overlay.classList.remove("hidden");
+  deleteAircraftBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    removeFromPlanes(id);
+  });
+});
+
+async function removeFromPlanes(id) {
+  try {
+    const res = await fetch(`http://localhost:5050/api/v1/planes/${id}`, {
+      method: "DELETE",
+    });
+    if (res.ok) {
+      removedAircraft.style.color = "green";
+      removedAircraft.innerText = "Removed successfully";
+      localStorage.clear();
       setTimeout(() => {
         location.reload();
       }, 500);
@@ -612,7 +657,7 @@ async function reviewLogsTable(aircraft) {
 
     sortedData.map((dt) => {
       let value = JSON.stringify(dt.id);
-      let markup = `<tr>
+      let markup = `<tr class="logs_tab">
                     <td>${dt.pilot}</td>
                     <td>${dt.nature}</td>
                     <td>${dt.starting}</td>
@@ -624,13 +669,14 @@ async function reviewLogsTable(aircraft) {
       reviewTable.insertAdjacentHTML("beforeend", markup);
     });
 
-    const reviewTab = document.querySelectorAll(".reviewTab");
-    reviewTab.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const tabId = JSON.parse(tab.value);
-        reviewMore(tabId);
-      });
-    });
+     const logTableTab = document.querySelectorAll(".logs_tab");
+     logTableTab.forEach((tab) => {
+       const reviewBtn = tab.querySelector(".reviewTab");
+       tab.addEventListener("click", () => {
+         let tabId = JSON.parse(reviewBtn.value);
+         reviewMore(tabId);
+       });
+     });
   } catch (err) {
     console.log(err);
   }
@@ -648,6 +694,7 @@ async function reviewMore(id) {
     const reviewData = data[0];
 
     const {
+      id: logID,
       aircraft,
       pilot,
       crew,
@@ -666,6 +713,7 @@ async function reviewMore(id) {
       category,
       limitdate,
     } = reviewData;
+
 
     let markup = `<i class="bx bxs-x-circle" id="closeModal" onclick="closeModal()"></i>
       <div class="review_data">
@@ -764,11 +812,34 @@ async function reviewMore(id) {
             <h4>${reformatedDate(limitdate)}</h4>
           </span>
         </div>
+        <hr>
+        <button type="button" class="btn btn-primary" id="delete_log">
+              Delete
+            </button>
       </div>`;
 
     reviewModal.insertAdjacentHTML("beforeend", markup);
     reviewModal.classList.remove("hidden");
     overlay.classList.remove("hidden");
+
+    const deleteLogBtn = document.getElementById("delete_log");
+    deleteLogBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      removeLog(logID);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function removeLog(id) {
+  try {
+    const res = await fetch(`http://localhost:5050/api/v1/logs/remove/${id}`, {
+      method: "DELETE",
+    });
+    if (res.ok) {
+      location.reload();
+    }
   } catch (err) {
     console.log(err);
   }
