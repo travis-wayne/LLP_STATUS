@@ -601,9 +601,12 @@ removeAircraftBtn.addEventListener("click", () => {
 
 async function removeFromPlanes(id) {
   try {
-    const res = await fetch(`http://localhost:5050/api/v1/planes/${id}`, {
-      method: "DELETE",
-    });
+    const res = await fetch(
+      `https://llp-api.onrender.com/api/v1/planes/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
     if (res.ok) {
       removedAircraft.style.color = "green";
       removedAircraft.innerText = "Removed successfully";
@@ -669,14 +672,14 @@ async function reviewLogsTable(aircraft) {
       reviewTable.insertAdjacentHTML("beforeend", markup);
     });
 
-     const logTableTab = document.querySelectorAll(".logs_tab");
-     logTableTab.forEach((tab) => {
-       const reviewBtn = tab.querySelector(".reviewTab");
-       tab.addEventListener("click", () => {
-         let tabId = JSON.parse(reviewBtn.value);
-         reviewMore(tabId);
-       });
-     });
+    const logTableTab = document.querySelectorAll(".logs_tab");
+    logTableTab.forEach((tab) => {
+      const reviewBtn = tab.querySelector(".reviewTab");
+      tab.addEventListener("click", () => {
+        let tabId = JSON.parse(reviewBtn.value);
+        reviewMore(tabId);
+      });
+    });
   } catch (err) {
     console.log(err);
   }
@@ -713,7 +716,6 @@ async function reviewMore(id) {
       category,
       limitdate,
     } = reviewData;
-
 
     let markup = `<i class="bx bxs-x-circle" id="closeModal" onclick="closeModal()"></i>
       <div class="review_data">
@@ -834,9 +836,12 @@ async function reviewMore(id) {
 
 async function removeLog(id) {
   try {
-    const res = await fetch(`http://localhost:5050/api/v1/logs/remove/${id}`, {
-      method: "DELETE",
-    });
+    const res = await fetch(
+      `https://llp-api.onrender.com/api/v1/logs/remove/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
     if (res.ok) {
       location.reload();
     }
