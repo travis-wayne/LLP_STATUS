@@ -51,6 +51,7 @@ window.addEventListener("load", () => {
   const tat = localStorage.getItem("tat");
   const tet = localStorage.getItem("tet");
   const landings = localStorage.getItem("landings");
+  const prop = localStorage.getItem("prop");
   tableData(aircraft);
   reviewLogsTable(aircraft);
   docTable(aircraft);
@@ -62,6 +63,7 @@ window.addEventListener("load", () => {
   tetElement.innerText = tet;
   landingsElement.innerText = landings;
   tetsohElement.innerText = tetElement.innerText;
+  propElement.innerText = prop;
 });
 
 function active(ele) {
@@ -109,6 +111,7 @@ const tatElement = document.querySelector("#tat_value");
 const tetElement = document.querySelector("#tet_value");
 const landingsElement = document.querySelector("#landings_value");
 let tetsohElement = document.querySelector("#tetsoh_value");
+let propElement = document.querySelector("#prop_value");
 
 async function populatePlanesDropdown() {
   try {
@@ -126,6 +129,7 @@ async function populatePlanesDropdown() {
         localStorage.setItem("tat", dt.tat);
         localStorage.setItem("tet", dt.tet);
         localStorage.setItem("landings", dt.landings);
+        localStorage.setItem("prop", dt.prop);
         tableData(dt.name);
         reviewLogsTable(dt.name);
         docTable(dt.name);
@@ -136,6 +140,7 @@ async function populatePlanesDropdown() {
         tetElement.innerText = dt.tet;
         landingsElement.innerText = dt.landings;
         tetsohElement.innerText = tetElement.innerText;
+        propElement.innerText = dt.prop;
       });
 
       dropdownContent.appendChild(option);
@@ -299,16 +304,26 @@ function parseCustomDateFormat(dateString) {
 
 function checkFlag(inputDate, hrs) {
   if (!inputDate) {
-    if (hrs < 0) return "unserviceable";
-    return "serviceable";
+    if (hrs < 0) {
+      return "unserviceable";
+    } else if (hrs <= 2 && hrs >= 0) {
+      return "due";
+    } else {
+      return "serviceable";
+    }
   }
   const inputDateObject = parseCustomDateFormat(inputDate);
 
   const currentDate = new Date();
+  const daysDifference = Math.floor(
+    (inputDateObject - currentDate) / (1000 * 60 * 60 * 24)
+  );
 
-  if (inputDateObject < currentDate || inputDateObject == currentDate) {
+  if (daysDifference < 0) {
     return "unserviceable";
-  } else if (inputDateObject > currentDate) {
+  } else if (daysDifference <= 2 && daysDifference >= 0) {
+    return "due";
+  } else {
     return "serviceable";
   }
 }
@@ -534,6 +549,7 @@ const addPlaneForm = document.getElementById("addPlaneForm");
 const aircraftName = document.getElementById("aircraftName");
 const totalAircraftTime = document.getElementById("totalAircraftTime");
 const totalEngineTime = document.getElementById("totalEngineTime");
+const totalProp = document.getElementById("totalProp");
 const numberOfLandings = document.getElementById("numberOfLandings");
 const addplaneFormMsg = document.getElementById("addplaneFormMsg");
 
@@ -544,6 +560,7 @@ addPlaneForm.addEventListener("submit", (e) => {
     tat: totalAircraftTime.value,
     tet: totalEngineTime.value,
     landings: numberOfLandings.value,
+    prop: totalProp.value,
   };
 
   renderSpinner(addPlaneForm);
@@ -569,6 +586,7 @@ async function addToPlane(data) {
       localStorage.setItem("tat", apiData[0].tat);
       localStorage.setItem("tet", apiData[0].tet);
       localStorage.setItem("landings", apiData[0].landings);
+      localStorage.setItem("prop", apiData[0].prop);
 
       setTimeout(() => {
         location.reload();
@@ -593,14 +611,18 @@ removeAircraftBtn.addEventListener("click", () => {
   overlay.classList.remove("hidden");
   deleteAircraftBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    removeFromPlanes(id);
+    removeFromPlanes(id, aircraft);
   });
 });
 
-async function removeFromPlanes(id) {
+async function removeFromPlanes(id, aircraft) {
   try {
     const res = await fetch(`http://localhost:5050/api/v1/planes/${id}`, {
       method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ aircraft }),
     });
     if (res.ok) {
       removedAircraft.style.color = "green";
@@ -665,14 +687,14 @@ async function reviewLogsTable(aircraft) {
       reviewTable.insertAdjacentHTML("beforeend", markup);
     });
 
-     const logTableTab = document.querySelectorAll(".logs_tab");
-     logTableTab.forEach((tab) => {
-       const reviewBtn = tab.querySelector(".reviewTab");
-       tab.addEventListener("click", () => {
-         let tabId = JSON.parse(reviewBtn.value);
-         reviewMore(tabId);
-       });
-     });
+    const logTableTab = document.querySelectorAll(".logs_tab");
+    logTableTab.forEach((tab) => {
+      const reviewBtn = tab.querySelector(".reviewTab");
+      tab.addEventListener("click", () => {
+        let tabId = JSON.parse(reviewBtn.value);
+        reviewMore(tabId);
+      });
+    });
   } catch (err) {
     console.log(err);
   }
@@ -707,7 +729,6 @@ async function reviewMore(id) {
       category,
       limitdate,
     } = reviewData;
-
 
     let markup = `<i class="bx bxs-x-circle" id="closeModal" onclick="closeModal()"></i>
       <div class="review_data">
