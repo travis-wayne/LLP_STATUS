@@ -17,6 +17,7 @@ function displayContents(ele) {
 }
 
 function updateDisplay() {
+  sidebar.classList.add("hide");
   const state = window.location.hash.slice(1);
   switch (state) {
     case "dashboard":
@@ -75,21 +76,21 @@ window.addEventListener("load", () => {
 function inspectionCheck(num, ele) {
   if (!num) return;
   if (num < 10) {
-    return ele.style.color = "var(--dark)";
+    return (ele.style.color = "var(--dark)");
   }
   const numberStr = num.toString();
 
   const lastTwoDigits = parseInt(numberStr.slice(-2));
   if (lastTwoDigits === 25 || lastTwoDigits === 50 || lastTwoDigits === 0o0) {
-    return ele.style.color = "#8b0000";
+    return (ele.style.color = "#8b0000");
   } else if (
     (lastTwoDigits < 25 && lastTwoDigits >= 11) ||
     (lastTwoDigits < 50 && lastTwoDigits >= 36) ||
     (lastTwoDigits < 100 && lastTwoDigits >= 86)
   ) {
-   return  ele.style.color = " #ff6700";
+    return (ele.style.color = " #ff6700");
   } else {
-   return  ele.style.color = "#039203";
+    return (ele.style.color = "#039203");
   }
 }
 
