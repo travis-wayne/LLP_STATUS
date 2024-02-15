@@ -308,41 +308,15 @@ button {
   left: 20%;
 }
 
-/* #content nav .switch-mode {
-  display: block;
-  min-width: 50px;
-  height: 25px;
-  border-radius: 25px;
-  background: var(--grey);
-  cursor: pointer;
-  position: relative;
-}
-
-#content nav .switch-mode::before {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  bottom: 2px;
-  width: calc(25px - 4px);
-  background: var(--blue);
-  border-radius: 50%;
-  transition: all 0.3s ease;
-}
-
-#content nav #switch-mode:checked + .switch-mode::before {
-  left: calc(100% - (25px - 4px) - 2px);
-} */
-
 .plane-switch {
   --dot: #fff;
-  --street: #6B6D76;
-  --street-line: #A8AAB4;
-  --street-line-mid: #C0C2C8;
-  --sky-1: #60A7FA;
-  --sky-2: #2F8EFC;
+  --street: #6b6d76;
+  --street-line: #a8aab4;
+  --street-line-mid: #c0c2c8;
+  --sky-1: #60a7fa;
+  --sky-2: #2f8efc;
   --light-1: rgba(255, 233, 0, 1);
-  --light-2: rgba(255, 233, 0, .3);
+  --light-2: rgba(255, 233, 0, 0.3);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -359,13 +333,21 @@ button {
   height: 25px;
   padding: 1px;
   border-radius: 13px;
-  background: linear-gradient(90deg, var(--street) 0%, var(--street) 25%, var(--sky-1) 75%, var(--sky-2) 100%) left var(--p, 0%) top 0;
+  background: linear-gradient(
+      90deg,
+      var(--street) 0%,
+      var(--street) 25%,
+      var(--sky-1) 75%,
+      var(--sky-2) 100%
+    )
+    left var(--p, 0%) top 0;
   background-position-x: var(--p, 0%);
   background-size: 400% auto;
   transition: background-position 0.6s;
 }
 
-.plane-switch input + div:before, .plane-switch input + div:after {
+.plane-switch input + div:before,
+.plane-switch input + div:after {
   content: "";
   display: block;
   position: absolute;
@@ -390,7 +372,9 @@ button {
   top: 1px;
   -webkit-animation: lights2 2s linear infinite;
   animation: lights2 2s linear infinite;
-  box-shadow: inset 0 0 0 2px var(--light-1), 0 21px 0 var(--light-1), 8px 0 0 var(--light-2), 8px 21px 0 var(--light-2), 16px 0 0 var(--light-2), 16px 21px 0 var(--light-2);
+  box-shadow: inset 0 0 0 2px var(--light-1), 0 21px 0 var(--light-1),
+    8px 0 0 var(--light-2), 8px 21px 0 var(--light-2), 16px 0 0 var(--light-2),
+    16px 21px 0 var(--light-2);
 }
 
 .plane-switch input + div span {
@@ -405,7 +389,9 @@ button {
   height: 1px;
   transform: translateX(var(--s, 0));
   background: var(--street-line-mid);
-  box-shadow: 5px 0 0 var(--street-line-mid), 10px 0 0 var(--street-line-mid), 15px 0 0 var(--street-line-mid), 20px 0 0 var(--street-line-mid), 25px 0 0 var(--street-line-mid);
+  box-shadow: 5px 0 0 var(--street-line-mid), 10px 0 0 var(--street-line-mid),
+    15px 0 0 var(--street-line-mid), 20px 0 0 var(--street-line-mid),
+    25px 0 0 var(--street-line-mid);
   transition: transform 0.3s;
 }
 
@@ -423,7 +409,8 @@ button {
   animation: clouds2 2s linear infinite var(--cd, 0s);
 }
 
-.plane-switch input + div span.cloud:before, .plane-switch input + div span.cloud:after {
+.plane-switch input + div span.cloud:before,
+.plane-switch input + div span.cloud:after {
   content: "";
   position: absolute;
   transform: translateX(var(--cx, 0));
@@ -470,21 +457,30 @@ button {
   --x: 25px;
   --s: -50px;
   --c: var(--sky-2);
-  --co: .8;
-  --co-2: .6;
+  --co: 0.8;
+  --co-2: 0.6;
 }
 
 @keyframes lights2 {
-  20%, 30% {
-    box-shadow: inset 0 0 0 2px var(--light-2), 0 21px 0 var(--light-2), 8px 0 0 var(--light-1), 8px 21px 0 var(--light-1), 16px 0 0 var(--light-2), 16px 21px 0 var(--light-2);
+  20%,
+  30% {
+    box-shadow: inset 0 0 0 2px var(--light-2), 0 21px 0 var(--light-2),
+      8px 0 0 var(--light-1), 8px 21px 0 var(--light-1), 16px 0 0 var(--light-2),
+      16px 21px 0 var(--light-2);
   }
 
-  55%, 65% {
-    box-shadow: inset 0 0 0 2px var(--light-2), 0 21px 0 var(--light-2), 8px 0 0 var(--light-2), 8px 21px 0 var(--light-2), 16px 0 0 var(--light-1), 16px 21px 0 var(--light-1);
+  55%,
+  65% {
+    box-shadow: inset 0 0 0 2px var(--light-2), 0 21px 0 var(--light-2),
+      8px 0 0 var(--light-2), 8px 21px 0 var(--light-2), 16px 0 0 var(--light-1),
+      16px 21px 0 var(--light-1);
   }
 
-  90%, 100% {
-    box-shadow: inset 0 0 0 2px var(--light-1), 0 21px 0 var(--light-1), 8px 0 0 var(--light-2), 8px 21px 0 var(--light-2), 16px 0 0 var(--light-2), 16px 21px 0 var(--light-2);
+  90%,
+  100% {
+    box-shadow: inset 0 0 0 2px var(--light-1), 0 21px 0 var(--light-1),
+      8px 0 0 var(--light-2), 8px 21px 0 var(--light-2), 16px 0 0 var(--light-2),
+      16px 21px 0 var(--light-2);
   }
 }
 
@@ -494,7 +490,8 @@ button {
     visibility: visible;
   }
 
-  98%, 100% {
+  98%,
+  100% {
     visibility: hidden;
   }
 
@@ -635,7 +632,7 @@ button {
 
 #content main .box-info li .text h3 {
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--dark);
 }
 
@@ -728,8 +725,9 @@ button {
   text-transform: uppercase;
 }
 
-#content main .table-data .order table tr td .status.serviceable, #content main .table-data .order table tr td .status.active {
-  background: green;
+#content main .table-data .order table tr td .status.serviceable,
+#content main .table-data .order table tr td .status.active {
+  background: #039203;
 }
 
 #content main .table-data .order table tr td .status.unserviceable,
@@ -738,7 +736,7 @@ button {
 }
 
 #content main .table-data .order table tr td .status.ambient,
-#content main .table-data .order table tr td .status.due  {
+#content main .table-data .order table tr td .status.due {
   background: var(--orange);
 }
 
@@ -876,6 +874,16 @@ button {
   }
 }
 
+.flash_warning {
+  color: #f4c2aa;
+}
+.flash_green {
+  color: #039203;
+}
+.flash_red {
+  color: #8b0000;
+}
+
 .flash {
   animation: flash 3s infinite;
 }
@@ -932,7 +940,7 @@ canvas {
 .addPlaneModal,
 .removePart,
 .review_modal,
-.add_doc{
+.add_doc {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -952,7 +960,7 @@ canvas {
 
 .review_modal {
   height: 100%;
-  padding: 15px
+  padding: 15px;
 }
 .doc_modal {
   position: fixed;
@@ -1163,7 +1171,6 @@ canvas {
   margin-top: 40px;
   width: 90%;
   color: var(--dark);
-
 }
 
 .review_data h2 {
