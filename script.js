@@ -64,7 +64,34 @@ window.addEventListener("load", () => {
   landingsElement.innerText = landings;
   tetsohElement.innerText = tetElement.innerText;
   propElement.innerText = prop;
+
+  // Inspection
+  inspectionCheck(tat, tatElement);
+  inspectionCheck(tet, tetElement);
+  inspectionCheck(prop, propElement);
 });
+
+// Inspection Check
+function inspectionCheck(num, ele) {
+  if (!num) return;
+  if (num < 10) {
+    return ele.style.color = "var(--dark)";
+  }
+  const numberStr = num.toString();
+
+  const lastTwoDigits = parseInt(numberStr.slice(-2));
+  if (lastTwoDigits === 25 || lastTwoDigits === 50 || lastTwoDigits === 0o0) {
+    return ele.style.color = "#8b0000";
+  } else if (
+    (lastTwoDigits < 25 && lastTwoDigits >= 11) ||
+    (lastTwoDigits < 50 && lastTwoDigits >= 36) ||
+    (lastTwoDigits < 100 && lastTwoDigits >= 86)
+  ) {
+   return  ele.style.color = " #ff6700";
+  } else {
+   return  ele.style.color = "#039203";
+  }
+}
 
 function active(ele) {
   allSideMenu.forEach((i) => {
@@ -141,6 +168,11 @@ async function populatePlanesDropdown() {
         landingsElement.innerText = dt.landings;
         tetsohElement.innerText = tetElement.innerText;
         propElement.innerText = dt.prop;
+
+        // Inspection
+        inspectionCheck(dt.tat, tatElement);
+        inspectionCheck(dt.tet, tetElement);
+        inspectionCheck(dt.prop, propElement);
       });
 
       dropdownContent.appendChild(option);
