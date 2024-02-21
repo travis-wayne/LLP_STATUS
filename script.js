@@ -515,6 +515,15 @@ async function logUpdate(data) {
       },
       body: JSON.stringify(data),
     });
+    const apiData = await res.json()
+
+    localStorage.setItem("aircraft", apiData[0].name);
+    localStorage.setItem("aircraftID", apiData[0].id);
+    localStorage.setItem("tat", apiData[0].tat);
+    localStorage.setItem("tet", apiData[0].tet);
+    localStorage.setItem("landings", apiData[0].landings);
+    localStorage.setItem("prop", apiData[0].prop);
+
   } catch (err) {
     console.log(err);
   }
