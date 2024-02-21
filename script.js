@@ -580,6 +580,7 @@ async function addToLog(data) {
       inputs.forEach((input) => (input.value = ``));
       actionsTaken.value = ``;
       setTimeout(() => {
+        window.location.hash = "dashboard"
         location.reload();
       }, 1000);
     }
