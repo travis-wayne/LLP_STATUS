@@ -82,13 +82,13 @@ function inspectionCheck(num, ele) {
 
   const lastTwoDigits = parseInt(numberStr.slice(-2));
   if (lastTwoDigits === 25 || lastTwoDigits === 50 || lastTwoDigits === 0o0) {
-    return (ele.style.color = "#8b0000");
+    return (ele.style.color = "red");
   } else if (
     (lastTwoDigits < 25 && lastTwoDigits >= 11) ||
     (lastTwoDigits < 50 && lastTwoDigits >= 36) ||
     (lastTwoDigits < 100 && lastTwoDigits >= 86)
   ) {
-    return (ele.style.color = " #ff6700");
+    return (ele.style.color = "orange");
   } else {
     return (ele.style.color = "#039203");
   }
@@ -550,6 +550,15 @@ async function logUpdate(data) {
       },
       body: JSON.stringify(data),
     });
+    const apiData = await res.json()
+
+    localStorage.setItem("aircraft", apiData[0].name);
+    localStorage.setItem("aircraftID", apiData[0].id);
+    localStorage.setItem("tat", apiData[0].tat);
+    localStorage.setItem("tet", apiData[0].tet);
+    localStorage.setItem("landings", apiData[0].landings);
+    localStorage.setItem("prop", apiData[0].prop);
+
   } catch (err) {
     console.log(err);
   }
@@ -571,6 +580,7 @@ async function addToLog(data) {
       inputs.forEach((input) => (input.value = ``));
       actionsTaken.value = ``;
       setTimeout(() => {
+        window.location.hash = "dashboard"
         location.reload();
       }, 1000);
     }

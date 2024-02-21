@@ -1134,6 +1134,7 @@ canvas {
 .cert h2 {
   margin-bottom: 20px;
   color: var(--dark);
+  width: 100%;
 }
 
 .see_more {
