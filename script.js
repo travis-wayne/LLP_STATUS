@@ -82,13 +82,13 @@ function inspectionCheck(num, ele) {
 
   const lastTwoDigits = parseInt(numberStr.slice(-2));
   if (lastTwoDigits === 25 || lastTwoDigits === 50 || lastTwoDigits === 0o0) {
-    return (ele.style.color = "#8b0000");
+    return (ele.style.color = "red");
   } else if (
     (lastTwoDigits < 25 && lastTwoDigits >= 11) ||
     (lastTwoDigits < 50 && lastTwoDigits >= 36) ||
     (lastTwoDigits < 100 && lastTwoDigits >= 86)
   ) {
-    return (ele.style.color = " #ff6700");
+    return (ele.style.color = "orange");
   } else {
     return (ele.style.color = "#039203");
   }
